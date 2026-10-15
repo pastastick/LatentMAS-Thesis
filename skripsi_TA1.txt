@@ -84,12 +84,6 @@
   Penalaran Laten Lain dan Komunikasi Berbasis Teks.
 }
 
-\titleeng{
-  A Comparison of Latent-Space Reasoning and Communication in
-  Multi-Agent Systems: Mixture of Inputs against Other Latent Reasoning
-  Formulations and Text-Based Communication.
-}
-
 \fullname{Harun Yahya}
 \NIM{22/505239/PA/21749}
 \yearenrollment{202X}
@@ -109,9 +103,12 @@
 \begin{singlespacing}\tableofcontents\end{singlespacing}
 
 % ── Isi Bab ─────────────────────────────────────────────────────────────
-\input{bab/Bab1}
-\input{bab/Bab2}
-\input{bab/Bab3_new}
+\input{build/bab/Bab1}
+\input{build/bab/Bab2}
+\input{build/bab/Bab3}
+
+% ── Daftar Pustaka ──────────────────────────────────────────────────────
+\input{build/bab/DaftarPustaka}
 
 
 \end{document}

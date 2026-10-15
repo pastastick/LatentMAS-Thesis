@@ -19,6 +19,7 @@ wheels/
 *.out
 *.toc
 *.synctex.gz
+*.bak-format
 
 # Bahan pemikiran & perencanaan.
 asset/
