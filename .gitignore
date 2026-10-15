@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[oc]
+.uv/
+build/
+dist/
+wheels/
+*.egg-info
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Bahan pemikiran & perencanaan.
+asset/
+kw/
+

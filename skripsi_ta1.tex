@@ -1,0 +1,117 @@
+% ============================================================================
+% PROPOSAL TUGAS AKHIR (TA 1) — Program Studi Statistika UGM
+% Template resmi: laporanta1statugm.cls
+% Kompilasi: latexmk -pdf skripsi_ta1.tex
+% ============================================================================
+\documentclass{laporanta1statugm}
+
+\usepackage{bm}        % math tebal (dipakai di persamaan)
+
+% ── Paket tambahan: gambar & kartu faktor ───────────────────────────────
+\usepackage{booktabs}          % \toprule \midrule \bottomrule (tabel metrik)
+\usepackage[most]{tcolorbox}   % kartu faktor bergaya Lampiran C QuantaAlpha
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+
+\usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
+
+
+% Warna kartu (meniru kartu Lampiran C QuantaAlpha)
+\definecolor{kartubiru}{RGB}{31,56,100}
+\definecolor{kartuabu}{RGB}{247,247,249}
+\definecolor{kartubadge}{RGB}{214,232,255}
+
+% Kartu utama: header biru tua, badan putih
+\newtcolorbox{kartufaktor}[1]{
+  enhanced, breakable,
+  colback=white, colframe=kartubiru,
+  boxrule=0.9pt, arc=2.5mm,
+  title={\bfseries #1},
+  fonttitle=\large,
+  coltitle=white, colbacktitle=kartubiru,
+  attach boxed title to top left={xshift=0mm, yshift=-2.8mm},
+  boxed title style={arc=2mm, boxrule=0pt, left=3mm, right=3mm},
+  top=5mm, left=4mm, right=4mm, bottom=3mm
+}
+
+% Kotak abu-abu untuk ekspresi faktor (monospace)
+\newtcolorbox{kotakekspresi}{
+  colback=kartuabu, colframe=black!25,
+  boxrule=0.5pt, arc=1.5mm,
+  left=2mm, right=2mm, top=1.5mm, bottom=1.5mm,
+  fontupper=\ttfamily\small
+}
+
+% Badge fase evolusi
+\newcommand{\fasebadge}[1]{%
+  \tcbox[on line, colback=kartubadge, colframe=kartubadge,
+         arc=1mm, boxrule=0pt, left=1mm, right=1mm,
+         top=0.3mm, bottom=0.3mm]{\small\textcolor{kartubiru}{#1}}}
+
+% Baris kunci–nilai di dalam kartu
+\newcommand{\barisfield}[2]{\makebox[3.8cm][l]{\textbf{#1}}#2\par\vspace{0.8mm}}
+
+% Kotak "respon mentah agen" bergaya Lampiran D LatentMAS (header oranye,
+% badan krem, font kecil) untuk menampilkan keluaran verbatim tiap agen.
+\definecolor{kartuoranye}{RGB}{184,101,44}
+\definecolor{kartukrem}{RGB}{253,246,227}
+\newtcolorbox{kotakrespon}[1]{
+  enhanced, breakable,
+  colback=kartukrem, colframe=kartuoranye,
+  boxrule=0.8pt, arc=1mm,
+  title={\bfseries #1},
+  fonttitle=\bfseries,
+  coltitle=white, colbacktitle=kartuoranye,
+  top=3mm, left=3.5mm, right=3.5mm, bottom=3mm,
+  fontupper=\renewcommand{\baselinestretch}{1}\footnotesize\selectfont
+}
+
+% ── Perintah bantu (seperlunya) ─────────────────────────────────────────
+\newcommand{\code}[1]{\texttt{#1}}                        % kode inline
+\newcommand{\important}[1]{\textbf{#1}}                    % penekanan
+\newcommand{\todo}[1]{{\color{red}\textbf{[TODO: #1]}}}   % penanda kerjaan
+\newcommand{\draft}{{\color{red}\textit{[DRAFT]}}}
+% \needref: formula hasil rekonstruksi/interpretasi (bukan transkripsi literal dari
+% kode) yang butuh rujukan paper/buku untuk pembuktian teoretis. Untuk direview user.
+\newcommand{\needref}[1]{{\color{blue}\textbf{[VERIFIKASI: #1]}}}
+
+% ── Data laporan ────────────────────────────────────────────────────────
+\titleind{
+  Perbandingan Penalaran dan Komunikasi Berbasis Ruang Laten pada
+  Sistem Multi-Agen: \textit{Mixture of Inputs} terhadap Metode
+  Penalaran Laten Lain dan Komunikasi Berbasis Teks.
+}
+
+\titleeng{
+  A Comparison of Latent-Space Reasoning and Communication in
+  Multi-Agent Systems: Mixture of Inputs against Other Latent Reasoning
+  Formulations and Text-Based Communication.
+}
+
+\fullname{Harun Yahya}
+\NIM{22/505239/PA/21749}
+\yearenrollment{202X}
+\examdate{tanggal bulan tahun}
+\degree{Sarjana}
+\yearsubmit{2026}
+\firstsupervisor{Pembimbing}
+%\secondsupervisor{Nama Dosen Pembimbing ke-2}
+\firstexaminer{Ketua Penguji}
+\secondexaminer{Penguji 1}
+\thirdexaminer{Penguji 2}
+\begin{document}
+\cover
+
+\newpage\phantomsection\addcontentsline{toc}{chapter}{DAFTAR ISI}
+\makeatletter\renewcommand\l@chapter[2]{\ifnum \c@tocdepth >\z@\addpenalty\@secpenalty\addvspace{0em}\setlength\@tempdima{1.4em}\begingroup\parindent \z@ \rightskip \@pnumwidth\parfillskip -\@pnumwidth\leavevmode \bfseries\advance\leftskip\@tempdima\hskip -\leftskip#1\nobreak\ \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfil\nobreak\hb@xt@\@pnumwidth{\hss #2}\par\endgroup\fi}\makeatother
+\begin{singlespacing}\tableofcontents\end{singlespacing}
+
+% ── Isi Bab ─────────────────────────────────────────────────────────────
+\input{build/bab/Bab1}
+\input{build/bab/Bab2}
+\input{build/bab/Bab3}
+
+
+\end{document}
