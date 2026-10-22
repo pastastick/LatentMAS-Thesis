@@ -2,7 +2,6 @@
 __pycache__/
 *.py[oc]
 .uv/
-build/
 dist/
 wheels/
 *.egg-info
@@ -22,6 +21,6 @@ wheels/
 *.bak-format
 
 # Bahan pemikiran & perencanaan.
-asset/
+assets/
 kw/
 

@@ -1,0 +1,79 @@
+\chapter{KESIMPULAN DAN SARAN}
+
+\section{Kesimpulan}
+\label{sec:kesimpulan}
+
+Berdasarkan hasil eksperimen dan analisis yang telah dilakukan, diperoleh
+beberapa kesimpulan sebagai berikut.
+
+\begin{enumerate}
+
+    \item
+    Penggunaan medium KV-\textit{cache} dapat mengurangi jumlah \textit{token}
+    yang digunakan dalam komunikasi antargen dibandingkan medium teks.
+    Pada \textit{benchmark} GSM8K, ARC-Challenge, dan HumanEval+, penghematan jumlah
+    \textit{token} berada pada rentang $75{,}0\%$--$87{,}8\%$.
+    Pengurangan jumlah \textit{token} tersebut juga diikuti oleh waktu
+    inferensi yang lebih singkat. Percepatan yang diperoleh berada pada
+    rentang sekitar $2{,}5$--$6{,}1$ kali lebih cepat dibandingkan medium teks.
+    Pada saat yang sama, akurasi keluaran yang diperoleh dengan medium KV-\textit{cache}
+    tidak jauh berbeda dengan medium teks.
+
+    \item
+    Di antara metode laten \code{soft}, \code{sample}, dan \code{raw}, \code{moi} menunjukkan hasil
+    yang kuat pada gabungan akurasi, efisiensi, dan fidelitas keluaran.
+    \code{moi} menghasilkan akurasi rerata sebesar $0{,}850$ dengan 
+    jumlah \textit{token} paling sedikit, yaitu $152{,}1$ per soal dan
+    waktu inferensi rata-rata $15{,}1$ detik per soal. Dibandingkan medium
+    teks yang membutuhkan $974{,}3$ \textit{token} dan $64{,}8$ detik per
+    soal, \code{moi} mengurangi jumlah \textit{token} sekitar $84{,}4\%$
+    dan waktu inferensi sekitar $76{,}7\%$.
+
+    \item
+    Secara keseluruhan, penelitian ini menunjukkan bahwa komunikasi laten
+    melalui KV-\textit{cache} dapat menjadi alternatif komunikasi berbasis
+    teks yang jauh lebih hemat sumber daya. Namun, hasil yang diperoleh tidak
+    hanya ditentukan oleh medium komunikasi, tetapi juga oleh cara informasi
+    direpresentasikan dan jenis tugas yang dikerjakan. Hasil geometri
+    representasi dan kapasitas kanal laten menunjukkan bahwa keterkaitan
+    representasi dengan ruang \textit{embedding} token berkaitan dengan
+    kemampuan mempertahankan informasi simbolik, terutama pada tugas yang
+    membutuhkan presisi simbolik seperti HumanEval+. Dalam kondisi eksperimen
+    penelitian ini, \code{moi} menunjukkan bahwa efisiensi komunikasi dapat
+    dicapai sekaligus dengan mempertahankan kinerja yang dekat dengan acuan
+    teks.
+
+\end{enumerate}
+
+\section{Saran}
+\label{sec:saran}
+
+Berdasarkan hasil dan keterbatasan penelitian ini, beberapa hal yang dapat
+dikembangkan pada penelitian selanjutnya adalah sebagai berikut.
+
+\begin{enumerate}
+
+    \item
+    Penelitian selanjutnya dapat menggunakan jumlah soal dan jenis
+    \textit{benchmark} yang lebih beragam. Penelitian ini menggunakan 100 soal
+    pada masing-masing GSM8K, ARC-Challenge, dan HumanEval+. Pengujian pada
+    lebih banyak soal dan tugas dengan karakteristik yang berbeda dapat
+    membantu melihat apakah pola efisiensi dan akurasi metode laten tetap
+    muncul pada kondisi yang lebih beragam.
+
+    \item
+    Penelitian selanjutnya dapat mengembangkan metode representasi laten
+    selain \code{raw}, \code{soft}, \code{sample}, dan \code{moi}. Pengembangan
+    metode representasi lain dapat digunakan untuk mengeksplorasi bentuk
+    komunikasi laten yang mampu mempertahankan informasi simbolik dengan
+    kebutuhan \textit{token} dan waktu inferensi yang tetap rendah.
+
+    \item
+    Penelitian selanjutnya dapat mengembangkan arsitektur bagian keluaran
+    model untuk mengurangi ketergantungan terhadap ruang \textit{token} dalam
+    proses \textit{decoding} representasi laten. Penggunaan \textit{output
+    head}, \textit{adapter}, atau mekanisme pemetaan keluaran lainnya dapat
+    dieksplorasi untuk mempertahankan informasi laten sebelum dikonversi
+    menjadi \textit{token}.
+
+\end{enumerate}

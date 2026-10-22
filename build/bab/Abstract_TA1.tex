@@ -1,0 +1,28 @@
+
+\begin{abstract}
+Komunikasi antaragen dalam \textit{Multi-Agent System} (MAS) berbasis 
+\textit{Large Language Model} (LLM) umumnya menggunakan teks, 
+sedangkan komunikasi berbasis ruang laten berpotensi mengurangi kebutuhan 
+representasi tekstual. Namun, bagaimana formulasi penalaran laten dan 
+medium komunikasi memengaruhi kinerja MAS masih perlu dikaji. Penalaran laten 
+memungkinkan LLM memproses informasi melalui representasi internal, 
+sementara komunikasi laten melalui \textit{key-value cache} (KV-cache) membuka 
+peluang bagi agen untuk bertukar informasi tanpa harus mengubahnya 
+menjadi teks terlebih dahulu. \textit{Mixture of Inputs} (MoI) menggunakan 
+pendekatan Bayesian untuk menggabungkan beberapa kemungkinan representasi 
+berdasarkan bobot posterior, sehingga diharapkan dapat menghasilkan masukan 
+yang lebih adaptif terhadap informasi yang tersedia dan mendukung proses penalaran berikutnya. 
+Penelitian ini membandingkan empat formulasi penalaran laten, 
+yaitu \textit{raw}, \textit{soft}, \textit{sample}, dan MoI, 
+serta dua medium komunikasi, yaitu teks dan KV-cache, menggunakan 
+model \textit{open-weight} Qwen3-8B. Pengujian dilakukan pada 
+\textit{benchmark} GSM8K, ARC-Challenge, dan HumanEval+ dengan mengevaluasi 
+akurasi penyelesaian tugas, penggunaan token, dan waktu inferensi. 
+Perbandingan ini diharapkan dapat menunjukkan sejauh mana komunikasi 
+berbasis KV-cache meningkatkan efisiensi dibandingkan komunikasi berbasis teks, 
+sekaligus mengungkap pengaruh formulasi penalaran laten terhadap keseimbangan 
+antara efisiensi dan akurasi.
+
+\textbf{Kata kunci:} \textit{Mixture of Inputs}, penalaran laten, 
+\textit{Multi-Agent System}, KV-cache, \textit{Large Language Model}.
+\end{abstract}

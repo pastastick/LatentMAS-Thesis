@@ -1,0 +1,711 @@
+\chapter{HASIL DAN PEMBAHASAN}
+
+\section{Deskripsi Data dan Lingkungan Eksperimental}
+\label{sec:deskripsi-data-lingkungan-eksperimental}
+
+Eksperimen dilakukan untuk membandingkan metode representasi langkah laten
+dan medium komunikasi pada \textit{Multi-Agent System} (MAS). Seluruh eksperimen
+menggunakan model \textit{open-weight} Qwen3-8B sebagai \textit{backbone}, dengan
+$L=36$ lapisan \textit{Transformer} \textit{decoder-only} dan dimensi
+\textit{hidden state} $d=4096$. Model menggunakan \textit{grouped-query attention}
+(GQA) dengan delapan \textit{key-value heads} serta \textit{untied embedding}.
+Konfigurasi model tersebut dijaga tetap pada seluruh kondisi eksperimen.
+
+Rancangan eksperimen menggunakan empat agen yang dijalankan secara sekuensial,
+yaitu \textit{planner}, \textit{critic}, \textit{refiner}, dan \textit{judger}.
+Pada medium \textit{KV-cache}, informasi internal diteruskan melalui
+\textit{KV-cache}, sedangkan pada medium teks informasi diteruskan dalam bentuk
+keluaran tekstual. Kondisi laten menggunakan hingga $m=10$ langkah laten dengan
+persamaan $\Phi$ yang sesuai.
+
+Eksperimen utama dilaksanakan pada 10 Agustus 2026 menggunakan tiga
+\textit{benchmark}, yaitu GSM8K, ARC-Challenge, dan HumanEval+. GSM8K digunakan
+untuk penalaran matematika, ARC-Challenge untuk tugas pilihan ganda, dan
+HumanEval+ untuk menghasilkan program Python. Data dan tugas yang digunakan
+disajikan pada Tabel~\ref{tab:data-benchmark}.
+
+\begin{table}[H]
+    \centering
+    \caption{Data dan tugas yang digunakan dalam eksperimen utama.}
+    \label{tab:data-benchmark}
+    \small
+    \begin{tabular}{llllr}
+        \hline
+        Tugas & Keluarga & Sumber & \textit{Split} \\
+        \hline
+        GSM8K & Matematika & \code{openai/gsm8k} & \code{test}\\
+        ARC-C & Pilihan ganda & \code{allenai/ai2\_arc} & \code{test}\\
+        HumanEval+ & Kode & \code{evalplus/humanevalplus} & \code{test}\\
+        \hline
+    \end{tabular}
+\end{table}
+
+Pada ARC-Challenge, label jawaban dikonversikan menjadi
+huruf $a$ hingga $d$. Pada HumanEval+, keluaran program Python dievaluasi
+menggunakan \textit{test harness} sesuai dengan \textit{entry point} pada
+masing-masing soal.
+
+Perlakuan utama terdiri atas empat metode langkah laten pada medium
+\textit{KV-cache}, yaitu \code{raw}, \code{soft}, \code{sample}, dan
+\code{moi}. Medium teks (\code{text}) digunakan sebagai kondisi pembanding.
+Matriks perlakuan utama ditunjukkan pada Tabel~\ref{tab:matriks-perlakuan}.
+
+\begin{table}[H]
+    \centering
+    \caption{Matriks perlakuan utama pada tiga \textit{benchmark}.}
+    \label{tab:matriks-perlakuan}
+    \small
+    \begin{tabular}{lccccc}
+        \hline
+        Perlakuan & Medium & persamaan $\Phi$ & GSM8K & ARC-C & HumanEval+ \\
+        \hline
+        \code{raw}    & \code{kv}   & \code{raw}    & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+        \code{soft}   & \code{kv}   & \code{soft}   & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+        \code{sample} & \code{kv}   & \code{sample} & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+        \code{moi}    & \code{kv}   & \code{moi}    & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+        \code{text}   & \code{text} & ---           & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Parameter yang tidak menjadi objek variasi dijaga tetap selama eksperimen.
+Ringkasan konfigurasi tersebut disajikan pada
+Tabel~\ref{tab:konfigurasi-eksperimen}.
+
+\begin{table}[H]
+    \centering
+    \caption{Konfigurasi tetap eksperimen utama.}
+    \label{tab:konfigurasi-eksperimen}
+    \small
+    \begin{tabular}{ll}
+        \hline
+        Komponen & Nilai \\
+        \hline
+        \textit{Backbone} & Qwen3-8B \\
+        Rantai agen & \textit{planner} $\rightarrow$ \textit{critic}
+        $\rightarrow$ \textit{refiner} $\rightarrow$ \textit{judger} \\
+        Jumlah langkah laten & $m=10$ \\
+        Suhu langkah laten & $T=0{,}7$ \\
+        Parameter MoI & $\beta=1$ \\
+        Kriteria \textit{early stopping} &
+        $\cos(h_{k+1},h_k)>0{,}999$ \\
+        Suhu menghasilkan teks & $T_{\mathrm{gen}}=0{,}6$ \\
+        \textit{Top-p} & $0{,}95$ \\
+        Maksimum token keluaran & $2048$ \\
+        Batas konteks medium \code{text} & $8000$ karakter \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Dengan demikian, terdapat 15 sel eksperimen, yaitu lima kondisi perlakuan pada
+tiga \textit{benchmark}, dengan 100 soal pada setiap sel. Seluruh kondisi dalam
+\textit{benchmark} yang sama menggunakan himpunan soal identik. Ukuran yang
+dicatat untuk setiap soal meliputi akurasi, \textit{format rate}, jumlah token
+keluaran, dan waktu eksekusi.
+
+%=============================
+\section{Akurasi dan Keandalan Format}
+\label{sec:akurasi-keandalan-format}
+
+Evaluasi awal dilakukan untuk membandingkan akurasi dan \textit{correct format rate}
+pada medium teks dan medium \textit{KV-cache}. Hasil perbandingan disajikan
+pada Gambar~\ref{fig:b4-hasil-utama} dan Tabel~\ref{tab:akurasi-format}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{build/assets/images/b4_g1_hasil_utama.png}
+    \caption{Perbandingan akurasi, jumlah token keluaran per soal, dan waktu
+    inferensi per soal pada tiga \textit{benchmark}.}
+    \label{fig:b4-hasil-utama}
+\end{figure}
+
+Gambar~\ref{fig:b4-hasil-utama} menunjukkan bahwa akurasi metode
+\textit{KV-cache} berada pada tingkat yang relatif dekat dengan medium teks
+pada ketiga \textit{benchmark}. Pada GSM8K, medium teks menghasilkan akurasi
+sebesar $0{,}90$, sedangkan \texttt{soft}, \texttt{sample}, dan \texttt{moi}
+masing-masing menghasilkan $0{,}88$, $0{,}86$, dan $0{,}92$. Pada ARC-Challenge,
+akurasi medium teks sebesar $0{,}93$, sementara \texttt{soft} dan
+\texttt{sample} mencapai $0{,}94$ dan \texttt{moi} mencapai $0{,}91$.
+Hasil tersebut menunjukkan bahwa penggunaan medium \textit{KV-cache} tidak
+secara umum diikuti oleh penurunan akurasi yang besar.
+
+Perbedaan lebih terlihat pada HumanEval+, di mana akurasi medium teks sebesar
+$0{,}76$, sedangkan \texttt{soft}, \texttt{sample}, dan \texttt{moi}
+masing-masing menghasilkan $0{,}69$, $0{,}74$, dan $0{,}72$. Dengan demikian,
+penurunan akurasi juga terjadi pada metode laten lainnya, tetapi
+\texttt{raw} menunjukkan penurunan yang lebih besar dengan akurasi sebesar
+$0{,}42$.
+
+Selain akurasi, \textit{correct format rate} digunakan untuk melihat keterpenuhan format
+keluaran yang diperlukan dalam proses evaluasi. Hasilnya disajikan pada
+Tabel~\ref{tab:akurasi-format}.
+
+\begin{table}[H]
+    \centering
+    \caption{Akurasi dan \textit{correct format rate} pada masing-masing
+    \textit{benchmark}.}
+    \label{tab:akurasi-format}
+    \small
+    \begin{tabular}{llrrrrr}
+        \hline
+        Tolok ukur & Ukuran & Teks & \texttt{raw} & \texttt{soft}
+        & \texttt{sample} & \texttt{moi} \\
+        \hline
+        GSM8K & Akurasi
+        & 0,90 & 0,83 & 0,88 & 0,86 & \textbf{0,92} \\
+        & \textit{correct format rate}
+        & 1,00 & 0,98 & 1,00 & 0,97 & 1,00 \\
+        \hline
+        ARC-C & Akurasi
+        & 0,93 & 0,89 & \textbf{0,94} & \textbf{0,94} & 0,91 \\
+        & \textit{correct format rate}
+        & 1,00 & 1,00 & 1,00 & 1,00 & 0,98 \\
+        \hline
+        HumanEval+ & Akurasi
+        & 0,76 & 0,42 & 0,69 & \textbf{0,74} & 0,72 \\
+        & \textit{correct format rate}
+        & 1,00 & 1,00 & 0,96 & 1,00 & 1,00 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:akurasi-format}, \textit{correct format rate} berada pada
+tingkat tinggi pada seluruh kondisi, dengan nilai antara $0{,}96$ dan
+$1{,}00$. Hal ini menunjukkan bahwa perbedaan akurasi yang diamati tidak
+secara umum disertai oleh kegagalan dalam memenuhi format keluaran. Pada
+HumanEval+, misalnya, \texttt{raw} tetap memiliki \textit{correct format rate} sebesar
+$1{,}00$ meskipun akurasinya hanya sebesar $0{,}42$.
+
+%=============================
+%=============================
+\section{Biaya Token dan Waktu Inferensi}
+\label{sec:biaya-token-waktu-inferensi}
+
+Selain mempertahankan akurasi, penggunaan medium \textit{KV-cache} juga
+ditinjau dari biaya inferensinya. Jumlah token keluaran digunakan untuk
+menggambarkan banyaknya keluaran tekstual yang dihasilkan selama proses
+komunikasi, sedangkan waktu per soal menunjukkan durasi yang diperlukan hingga
+suatu soal selesai diproses. Perbandingan kedua ukuran tersebut ditunjukkan
+pada Gambar~\ref{fig:b4-hasil-utama} dan Tabel~\ref{tab:biaya-inferensi}.
+
+\begin{table}[H]
+    \centering
+    \caption{Jumlah token keluaran dan waktu inferensi per soal.}
+    \label{tab:biaya-inferensi}
+    \small
+    \begin{tabular}{llrrrrr}
+        \hline
+        Tolok ukur & Ukuran & Teks & \texttt{raw} & \texttt{soft}
+        & \texttt{sample} & \texttt{moi} \\
+        \hline
+        GSM8K & Token/soal
+        & 844,7 & 211,5 & 192,3 & 187,4 & 189,8 \\
+        & Detik/soal
+        & 49,2 & 19,7 & 14,5 & 16,5 & 15,9 \\
+        \hline
+        ARC-C & Token/soal
+        & 1081,0 & 219,4 & 154,1 & 145,8 & 145,0 \\
+        & Detik/soal
+        & 76,0 & 20,6 & 14,0 & 13,3 & 15,3 \\
+        \hline
+        HumanEval+ & Token/soal
+        & 997,2 & 176,8 & 121,5 & 126,0 & 121,6 \\
+        & Detik/soal
+        & 69,3 & 17,8 & 11,4 & 12,4 & 14,1 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:biaya-inferensi}, medium \textit{KV-cache} menghasilkan
+jumlah token keluaran yang lebih rendah dibandingkan medium teks pada seluruh
+\textit{benchmark}. Pada GSM8K, misalnya, jumlah token per soal turun dari
+$844{,}7$ pada medium teks menjadi sekitar $187{,}4$--$211{,}5$ token pada
+medium \textit{KV-cache}. Pola serupa terlihat pada ARC-Challenge dan
+HumanEval+, dengan seluruh metode \textit{KV-cache} menghasilkan keluaran
+yang lebih sedikit dibandingkan medium teks.
+
+Pengurangan jumlah token tersebut diikuti oleh penurunan waktu inferensi.
+Pada GSM8K, waktu per soal berkurang dari $49{,}2$ detik pada medium teks
+menjadi $14{,}5$--$19{,}7$ detik pada medium \textit{KV-cache}. Pada
+ARC-Challenge dan HumanEval+, pola yang sama juga terlihat, yaitu seluruh
+metode \textit{KV-cache} memerlukan waktu inferensi yang lebih rendah
+daripada medium teks.
+
+Pola tersebut menunjukkan bahwa perbedaan biaya inferensi terutama terlihat
+pada tingkat medium komunikasi. Medium teks memerlukan pembuatan keluaran
+tekstual yang lebih banyak, sedangkan \textit{KV-cache} memungkinkan informasi
+antaragen diteruskan tanpa seluruh informasi tersebut dibangkitkan kembali
+dalam bentuk teks. Meskipun terdapat perbedaan biaya di antara metode
+\textit{KV-cache}, perbedaan tersebut relatif lebih kecil dibandingkan
+perbedaan antara medium \textit{KV-cache} dan medium teks.
+
+%=============================
+%=============================
+\section{Efisiensi Medium KV terhadap Medium Teks}
+\label{sec:efisiensi-medium-kv-teks}
+
+Perbandingan selanjutnya dilakukan untuk mengukur efisiensi medium
+\textit{KV-cache} relatif terhadap medium teks. Efisiensi dinilai berdasarkan
+penghematan jumlah \textit{token} keluaran dan percepatan waktu inferensi.
+Kedua ukuran dihitung terhadap kondisi teks pada \textit{benchmark} yang sama.
+Hasil perbandingan disajikan pada Tabel~\ref{tab:efisiensi-kv-teks} dan
+Gambar~\ref{fig:b4-pareto}.
+
+\begin{table}[H]
+    \centering
+    \caption{Efisiensi medium \textit{KV-cache} relatif terhadap medium teks.}
+    \label{tab:efisiensi-kv-teks}
+    \small
+    \begin{tabular}{llrrr}
+        \hline
+        Tolok ukur & Langkah laten & Akurasi &
+        Penghematan \textit{token} & Percepatan \\
+        \hline
+        GSM8K & \texttt{raw}    & 0,83 & 75,0\% & $\times 2,5$ \\
+              & \texttt{soft}   & 0,88 & 77,2\% & $\times 3,4$ \\
+              & \texttt{sample} & 0,86 & 77,8\% & $\times 3,0$ \\
+              & \texttt{moi}    & 0,92 & 77,5\% & $\times 3,1$ \\
+        \hline
+        ARC-C & \texttt{raw}    & 0,89 & 79,7\% & $\times 3,7$ \\
+              & \texttt{soft}   & 0,94 & 85,7\% & $\times 5,4$ \\
+              & \texttt{sample} & 0,94 & 86,5\% & $\times 5,7$ \\
+              & \texttt{moi}    & 0,91 & 86,6\% & $\times 5,0$ \\
+        \hline
+        HumanEval+ & \texttt{raw}    & 0,42 & 82,3\% & $\times 3,9$ \\
+                   & \texttt{soft}   & 0,69 & 87,8\% & $\times 6,1$ \\
+                   & \texttt{sample} & 0,74 & 87,4\% & $\times 5,6$ \\
+                   & \texttt{moi}    & 0,72 & 87,8\% & $\times 4,9$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:efisiensi-kv-teks}, seluruh metode
+\textit{KV-cache} menghasilkan penghematan \textit{token} dan percepatan
+waktu inferensi pada ketiga \textit{benchmark}. Penghematan \textit{token}
+berada pada rentang $75{,}0\%$--$87{,}8\%$, sedangkan percepatan berada pada
+rentang $\times 2{,}5$--$\times 6{,}1$. Dengan demikian, efisiensi medium
+\textit{KV-cache} terlihat secara konsisten ketika dibandingkan dengan medium
+teks, meskipun besarnya penghematan berbeda menurut \textit{benchmark} dan
+metode yang digunakan.
+
+Gambar~\ref{fig:b4-pareto} memperlihatkan hubungan antara akurasi dengan
+jumlah \textit{token} dan waktu inferensi. Pada kedua panel, kondisi teks
+berada pada wilayah dengan biaya inferensi yang lebih tinggi, sedangkan
+metode \textit{KV-cache} berada pada wilayah dengan jumlah \textit{token}
+dan waktu yang lebih rendah. Pola tersebut menunjukkan bahwa penggunaan
+\textit{KV-cache} memberikan pengurangan biaya komunikasi sekaligus
+mempertahankan tingkat akurasi yang telah dibahas pada bagian sebelumnya.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{build/assets/images/b4_g2_pareto.png}
+    \caption{Hubungan akurasi dengan jumlah \textit{token} keluaran per soal
+    dan waktu inferensi per soal.}
+    \label{fig:b4-pareto}
+\end{figure}
+
+Efisiensi tersebut tidak sepenuhnya seragam pada seluruh metode. Pada
+HumanEval+, misalnya, \texttt{raw} memiliki akurasi $0{,}42$ meskipun
+menghasilkan penghematan \textit{token} sebesar $82{,}3\%$ dan percepatan
+sebesar $\times 3{,}9$. Sementara itu, \texttt{moi} mencapai akurasi $0{,}72$
+dengan penghematan \textit{token} sebesar $87{,}8\%$ dan percepatan sebesar
+$\times 4{,}9$. Hal ini menunjukkan bahwa besarnya efisiensi perlu dibaca
+bersama dengan akurasi, karena pengurangan biaya inferensi tidak dengan
+sendirinya menunjukkan kesetaraan kinerja.
+
+%=============================
+\section{Perbandingan Berpasangan MoI terhadap metode lain}
+\label{sec:perbandingan-berpasangan-moi-acuan}
+
+Setelah membandingkan efisiensi medium \textit{KV-cache} terhadap medium teks,
+analisis selanjutnya dilakukan secara berpasangan untuk mengetahui apakah
+perbedaan akurasi \texttt{moi} terhadap kondisi acuan didukung oleh data pada
+tingkat soal. Perbandingan dilakukan menggunakan soal yang sama pada setiap
+pasangan kondisi. Oleh karena itu, setiap soal membentuk satu pasangan
+observasi yang memungkinkan perbedaan kinerja dihitung secara langsung.
+
+Dalam analisis ini, \texttt{moi} dibandingkan dengan dua kondisi acuan, yaitu
+\texttt{raw} pada medium \textit{KV-cache} dan medium teks. Besarnya perbedaan
+akurasi dinyatakan sebagai $\Delta$ akurasi, sedangkan ketidakpastian estimasi
+ditunjukkan melalui selang kepercayaan (\textit{SK}) $95\%$. Untuk mengetahui
+apakah terdapat bukti statistik mengenai perbedaan akurasi, digunakan uji
+McNemar eksak. Hasil perbandingan tersebut disajikan pada
+Tabel~\ref{tab:selisih-moi-acuan}.
+
+\begin{table}[H]
+    \centering
+    \caption{Selisih akurasi berpasangan \texttt{moi} terhadap kondisi acuan.}
+    \label{tab:selisih-moi-acuan}
+    \small
+    \begin{tabular}{llrr}
+        \hline
+        Tolok ukur & Acuan & $\Delta$ akurasi & SK 95\% \\
+        \hline
+        GSM8K & \texttt{raw} (KV)
+        & +0,09 & $[+0,01;\,+0,17]$ \\
+        GSM8K & Teks
+        & +0,02 & $[-0,04;\,+0,08]$ \\
+        \hline
+        ARC-C & \texttt{raw} (KV)
+        & +0,02 & $[-0,03;\,+0,07]$ \\
+        ARC-C & Teks
+        & -0,02 & $[-0,07;\,+0,03]$ \\
+        \hline
+        HumanEval+ & \texttt{raw} (KV)
+        & +0,30 & $[+0,20;\,+0,40]$ \\
+        HumanEval+ & Teks
+        & -0,04 & $[-0,13;\,+0,05]$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Berdasarkan Tabel~\ref{tab:selisih-moi-acuan}, perbedaan \texttt{moi} terhadap
+\texttt{raw} menunjukkan pola yang berbeda pada ketiga \textit{benchmark}.
+Pada GSM8K, \texttt{moi} memiliki akurasi $0{,}09$ lebih tinggi daripada
+\texttt{raw}, dengan selang kepercayaan $95\%$ sebesar
+$[+0{,}01;\,+0{,}17]$ dan nilai-$p$ sebesar $0{,}0490$. Pada ARC-C, selisih
+tersebut lebih kecil, yaitu $+0{,}02$, dengan selang kepercayaan
+$[-0{,}03;\,+0{,}07]$ dan nilai-$p$ sebesar $0{,}6875$. Perbedaan terbesar
+terlihat pada HumanEval+, dengan selisih akurasi sebesar $+0{,}30$,
+selang kepercayaan $[+0{,}20;\,+0{,}40]$, dan nilai-$p<0{,}0001$.
+
+Hasil tersebut menunjukkan bahwa keunggulan \texttt{moi} terhadap
+\texttt{raw} paling jelas pada HumanEval+. Pada GSM8K terdapat perbedaan
+positif yang relatif lebih kecil, sedangkan pada ARC-C selisihnya sangat
+kecil dan interval kepercayaannya mencakup nilai nol. Dengan demikian,
+perbedaan kinerja antara kedua metode tidak memiliki pola yang sama pada
+seluruh jenis tugas.
+
+Perbandingan terhadap medium teks menunjukkan hasil yang berbeda. Pada
+GSM8K, \texttt{moi} memiliki akurasi $0{,}02$ lebih tinggi daripada teks,
+sedangkan pada ARC-C dan HumanEval+ masing-masing lebih rendah sebesar
+$0{,}02$ dan $0{,}04$. Ketiga selang kepercayaan masing-masing mencakup nilai
+nol, dengan nilai-$p$ sebesar $0{,}7539$, $0{,}6875$, dan $0{,}5235$.
+Dengan demikian, berdasarkan pengujian berpasangan, tidak terdapat bukti
+statistik yang cukup mengenai perbedaan akurasi antara \texttt{moi} dan
+medium teks pada ketiga \textit{benchmark} tersebut.
+
+Secara keseluruhan, hasil perbandingan menunjukkan bahwa \texttt{moi}
+mempertahankan akurasi yang tidak berbeda secara signifikan dari medium teks,
+sementara memberikan keunggulan yang lebih nyata dibandingkan \texttt{raw}
+pada HumanEval+. Hasil ini memperlihatkan bahwa metode \texttt{moi} tidak
+hanya perlu dinilai berdasarkan akurasi, tetapi juga berdasarkan mekanisme
+representasi informasi yang mendasari perbedaan kinerja tersebut.
+
+%=============================
+\section{Geometri Vektor Langkah Laten}
+\label{sec:geometri-vektor-langkah-laten}
+
+Hasil pada Subbab~\ref{sec:perbandingan-berpasangan-moi-acuan} menunjukkan
+bahwa perbedaan kinerja \texttt{moi} terhadap \texttt{raw} lebih jelas pada
+HumanEval+ dibandingkan pada GSM8K dan ARC-C. Analisis selanjutnya digunakan
+untuk melihat apakah perbedaan tersebut disertai oleh perbedaan karakteristik
+geometris representasi langkah laten. Fokus analisis adalah kedekatan vektor
+langkah laten terhadap ruang \textit{input embedding} token.
+
+Kedekatan tersebut diukur menggunakan kemiripan kosinus maksimum antara vektor
+langkah laten dan seluruh vektor pada matriks \textit{input embedding}, yaitu
+
+\begin{equation}
+    s\bigl(\Phi(h)\bigr)
+    =
+    \max_i
+    \cos\left(
+    \Phi(h),W_{\mathrm{in}}[i]
+    \right),
+    \label{eq:geometri-cosine}
+\end{equation}
+
+di mana nilai yang semakin mendekati $1$ menunjukkan bahwa terdapat vektor
+\textit{embedding} token dengan arah yang semakin dekat terhadap vektor langkah
+laten. Oleh karena itu, nilai ini digunakan sebagai ukuran kedekatan geometris
+representasi laten terhadap ruang representasi token.
+
+\begin{table}[H]
+    \centering
+    \caption{Geometri vektor langkah laten berdasarkan kedekatan terhadap
+    \textit{input embedding} token.}
+    \label{tab:geometri-vektor}
+    \small
+    \begin{tabular}{l l c c c}
+        \hline
+        Langkah laten & Vektor yang disisipkan & Konveks &
+        $\max_i\cos$ & Rentang \\
+        \hline
+        \texttt{raw}
+        & $\displaystyle \tau\,\frac{hM}{\lVert hM\rVert}$
+        & tidak & 0,312 & $[0,164;\,0,385]$ \\
+
+        \texttt{soft}
+        & $w=p$
+        & ya & 0,927 & $[0,784;\,1,000]$ \\
+
+        \texttt{sample}
+        & $w=e_y$
+        & ya & 1,000 & $[1,000;\,1,000]$ \\
+
+        \texttt{moi}
+        & $\displaystyle
+        w=
+        \frac{\tilde{H}p+(\beta+1-\tilde{H})e_y}
+        {\beta+1}$
+        & ya & 1,000 & $[1,000;\,1,000]$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Tabel~\ref{tab:geometri-vektor} memperlihatkan pemisahan yang jelas antara
+\texttt{raw} dan tiga metode lainnya. Nilai $\max_i\cos$ pada \texttt{raw}
+hanya sebesar $0{,}312$ dengan rentang $[0{,}164;\,0{,}385]$. Sebaliknya,
+\texttt{soft} memiliki nilai $0{,}927$, sedangkan \texttt{sample} dan
+\texttt{moi} mencapai $1{,}000$ dengan rentang $[1{,}000;\,1{,}000]$.
+Dengan demikian, representasi yang dihasilkan oleh \texttt{soft},
+\texttt{sample}, dan \texttt{moi} memiliki kedekatan yang jauh lebih tinggi
+terhadap \textit{embedding} token dibandingkan \texttt{raw}.
+
+Perbedaan tersebut sejalan dengan struktur persamaan yang digunakan oleh
+masing-masing metode. Pada \texttt{soft}, \texttt{sample}, dan \texttt{moi},
+representasi dibentuk dari bobot yang berada pada ruang konveks
+\textit{embedding} token. Sifat tersebut membatasi representasi yang dihasilkan
+pada ruang yang dibentuk oleh vektor-vektor \textit{embedding} tersebut.
+Khusus pada \texttt{sample}, representasi secara langsung berimpit dengan
+vektor \textit{embedding} token, sehingga nilai kemiripan maksimum mencapai
+$1{,}000$. Pada \texttt{moi}, nilai yang sama menunjukkan bahwa pada konfigurasi
+yang diamati terdapat vektor \textit{embedding} yang memiliki arah berimpit
+dengan representasi yang dihasilkan.
+
+Sebaliknya, \texttt{raw} tidak memiliki batasan geometris yang sama. Nilai
+kemiripan maksimum yang lebih rendah menunjukkan bahwa representasi
+\texttt{raw} cenderung berada lebih jauh dari vektor \textit{embedding} token.
+Pola tersebut juga terlihat pada Gambar~\ref{fig:b4-geometri}, yang
+memperlihatkan pemisahan antara \texttt{raw} dan kelompok
+\texttt{soft}, \texttt{sample}, dan \texttt{moi}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{build/assets/images/b4_g3_geometri.png}
+    \caption{Kedekatan geometris vektor langkah laten terhadap
+    \textit{input embedding} token.}
+    \label{fig:b4-geometri}
+\end{figure}
+
+Untuk menilai apakah rendahnya kedekatan \texttt{raw} dapat dijelaskan hanya
+oleh kemiripan antara ruang sebelum dan sesudah transformasi, digunakan pula
+beberapa ukuran diagnostik. Jarak relatif transformasi terhadap matriks
+identitas diperoleh sebesar
+\begin{equation}
+    \frac{\lVert M-I\rVert_F}{\lVert I\rVert_F}
+    =
+    1{,}04,
+    \label{eq:geometri-matrix-diagnostic}
+\end{equation}
+
+sedangkan rata-rata kemiripan arah antara $h$ dan $hM$ adalah
+
+\begin{equation}
+    \overline{\cos(h,hM)}
+    =
+    0{,}0112.
+    \label{eq:geometri-h-hm}
+\end{equation}
+
+Nilai \(\lVert M-I\rVert_F/\lVert I\rVert_F=1{,}04\) menunjukkan bahwa beda antara 
+matriks transformasi \(M\) dan matriks identitas \(I\) sedikit lebih besar daripada 
+ukuran matriks identitas itu sendiri. Jadi, \(M\) tidak bisa dibilang dekat dengan 
+identitas kalau dilihat dari ukuran ini. Hal ini juga terlihat dari rata-rata kemiripan 
+arah antara \(h\) dan \(hM\) yang hanya \(0{,}0112\). Angka itu sangat dekat dengan nol, 
+jadi \(hM\) secara rata-rata tidak lagi searah dengan \(h\). Kedua angka ini sama-sama 
+menunjukkan bahwa transformasi pada \texttt{raw} benar-benar mengubah representasi data, 
+bukan hanya mengubah skala atau mempertahankan arah vektor awalnya.
+
+Selain itu, rata-rata kemiripan antara \textit{input embedding} dan
+\textit{output embedding} pada indeks yang sama adalah
+
+\begin{equation}
+    \overline{
+    \cos\left(
+    W_{\mathrm{in}}[i],W_{\mathrm{out}}[i]
+    \right)
+    }
+    =
+    0{,}0041.
+    \label{eq:geometri-in-out}
+\end{equation}
+
+Nilai $0{,}0041$ yang juga sangat dekat dengan nol menunjukkan bahwa
+\textit{input embedding} dan \textit{output embedding} pada indeks yang sama
+memiliki kesamaan arah yang sangat rendah. Ini penting karena menunjukkan bahwa
+kedekatan vektor \texttt{raw} dengan \textit{input embedding} tidak bisa
+dijelaskan hanya dengan anggapan bahwa kedua ruang \textit{embedding} itu
+punya arah yang hampir sama. Jadi, ketiga ukuran pemeriksaan ini bersama-sama
+menunjukkan bahwa transformasi dan hubungan antarruang \textit{embedding} pada
+model yang dipakai memiliki perbedaan arah yang cukup besar.
+
+Ketiga ukuran pemeriksaan ini menguatkan bahwa kedekatan \texttt{raw} yang
+rendah dengan \textit{input embedding} bukan hanya akibat transformasi yang
+mempertahankan arah vektor secara langsung.
+
+Temuan ini menjadi konteks untuk hasil perbandingan berpasangan pada
+Subbab~\ref{sec:perbandingan-berpasangan-moi-acuan}. Pada HumanEval+,
+\texttt{moi} memiliki selisih akurasi $0{,}30$ terhadap \texttt{raw},
+sedangkan perbedaannya dengan medium teks tidak cukup bukti secara statistik.
+Pola ini cocok dengan kemungkinan bahwa perbedaan kinerja antara \texttt{moi}
+dan \texttt{raw} berkaitan dengan perbedaan sifat geometris representasi laten
+yang dihasilkan kedua metode.
+
+Namun, kedekatan geometris saja tidak berarti ada hubungan sebab-akibat antara
+representasi yang lebih dekat dengan \textit{embedding} token dan akurasi.
+Hasil pada subbab ini menunjukkan adanya perbedaan sifat representasi
+antarmetode, sedangkan hubungan antara perubahan geometri dan perubahan
+akurasi perlu dilihat lewat variasi representasi yang dikontrol lebih khusus.
+
+%=============================
+\section{Kedekatan Geometris dan Akurasi}
+\label{sec:kedekatan-geometris-akurasi}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{build/assets/images/b4_g6_ambang.png}
+    \caption{Hubungan kedekatan geometris dengan akurasi HumanEval+ pada
+    sumbu interpolasi dari \code{raw} menuju \code{soft}.}
+    \label{fig:ambang-geometri}
+\end{figure}
+
+Hasil pada Subbab~\ref{sec:geometri-vektor-langkah-laten} menunjukkan adanya
+perbedaan kedekatan geometris antara vektor langkah laten dan
+\textit{embedding} token, terutama antara \code{raw} dan metode lainnya.
+Untuk melihat apakah perubahan kedekatan geometris berkaitan dengan perubahan
+akurasi, dilakukan percobaan interpolasi dari representasi \code{raw} menuju
+\code{soft}. Percobaan ini digunakan sebagai analisis tambahan untuk melihat
+perubahan akurasi ketika representasi \code{raw} secara bertahap digeser
+menuju representasi \code{soft}.
+
+Hasil interpolasi disajikan pada Gambar~\ref{fig:ambang-geometri} dan
+Tabel~\ref{tab:b4-ambang}. Nilai $\alpha=0$ menunjukkan representasi \code{raw},
+sedangkan $\alpha=1$ menunjukkan representasi \code{soft}. Kedekatan
+geometris diukur dengan nilai maksimum kemiripan kosinus terhadap seluruh
+\textit{input embedding} token. Semakin besar nilainya, semakin dekat
+representasi laten dengan arah salah satu \textit{embedding} token.
+
+\begin{equation}
+    s(\alpha)
+    =
+    \max_i
+    \cos\left(
+    z_{\alpha},W_{\mathrm{in}}[i]
+    \right).
+    \label{eq:kedekatan-geometris}
+\end{equation}
+
+\input{build/assets/tables/b4_ambang}
+
+Berdasarkan Tabel~\ref{tab:b4-ambang}, pada $\alpha=0$, representasi
+\code{raw} memiliki kedekatan geometris sebesar $0{,}312$ dan akurasi
+HumanEval+ sebesar $0{,}42$. Ketika $\alpha$ dinaikkan menjadi $0{,}25$,
+kedekatan geometris meningkat menjadi $0{,}452$, tetapi akurasi justru turun
+menjadi $0{,}28$. Jadi, peningkatan kedekatan geometris pada tahap awal tidak
+langsung diikuti oleh peningkatan akurasi.
+
+Perubahan yang lebih jelas terlihat mulai dari $\alpha=0{,}50$. Pada nilai
+tersebut, kedekatan geometris meningkat menjadi $0{,}720$ dan akurasi naik
+menjadi $0{,}68$. Selanjutnya, pada $\alpha=0{,}75$, kedekatan geometris
+mencapai $0{,}924$ dengan akurasi $0{,}69$. Pada $\alpha=1$, kedekatan
+geometris hanya meningkat sedikit menjadi $0{,}927$, sedangkan akurasi tetap
+sebesar $0{,}69$.
+
+Pola tersebut menunjukkan bahwa perubahan akurasi tidak mengikuti kedekatan
+geometris secara linear. Pada tahap awal, kenaikan kedekatan dari $0{,}312$
+menjadi $0{,}452$ justru disertai penurunan akurasi. Sebaliknya, setelah
+kedekatan mencapai $0{,}720$, akurasi meningkat dari $0{,}28$ menjadi
+$0{,}68$ dan kemudian berada pada kisaran $0{,}68$--$0{,}69$. Pada tingkat
+kedekatan sekitar $0{,}92$, peningkatan kedekatan lebih lanjut tidak lagi
+diikuti perubahan akurasi yang terlihat.
+
+Dengan demikian, hasil interpolasi menunjukkan adanya hubungan antara posisi
+geometris representasi dan akurasi HumanEval+. Perubahan akurasi yang lebih besar muncul
+ketika representasi bergerak cukup jauh dari \code{raw} menuju \code{soft}.
+Hal ini mendukung dugaan bahwa ketidakselarasan geometris \code{raw} dengan
+ruang \textit{embedding} token berkaitan dengan kinerjanya pada HumanEval+,
+meskipun hasil ini belum cukup untuk menyatakan bahwa kedekatan geometris
+merupakan penyebab langsung perubahan akurasi.
+
+%=============================
+\section{Ketakpekaan MoI terhadap $\beta$}
+\label{sec:ketakpekaan-moi-beta}
+
+Parameter $\beta$ pada metode \code{moi} mengatur bobot relatif antara
+distribusi $p$ dan token terpilih $e_y$. Berdasarkan
+Persamaan~\eqref{eq:moi-beta-influence}, koefisien distribusi \textit{soft} dapat
+dituliskan sebagai
+
+\begin{equation}
+a=\frac{\tilde{H}}{\beta+1},
+\label{eq:beta-koefisien}
+\end{equation}
+
+sehingga peningkatan $\beta$ memperkecil kontribusi $p$ dan membuat
+representasi semakin didominasi oleh $e_y$. Untuk melihat sensitivitas hasil
+terhadap parameter tersebut, dilakukan variasi $\beta$ pada rentang
+$0{,}25$ hingga $8{,}00$. Hasil pengujian disajikan pada
+Tabel~\ref{tab:b4-beta} dan Gambar~\ref{fig:beta}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{build/assets/images/b4_g5_beta.png}
+    \caption{Recall informasi simbolik pada berbagai nilai $\beta$.}
+    \label{fig:beta}
+\end{figure}
+
+\input{build/assets/tables/b4_beta}
+
+Berdasarkan Tabel~\ref{tab:b4-beta}, perubahan $\beta$ tidak menghasilkan
+perubahan yang besar pada \textit{recall}. Pada \textit{recall} nama fungsi,
+nilainya berada pada rentang $0{,}35$--$0{,}38$, sedangkan \textit{recall}
+token acak berada pada rentang $0{,}11$--$0{,}13$. Dengan demikian, meskipun
+$\beta$ mengubah bobot komponen penyusun representasi \code{moi}, perubahan
+tersebut tidak memberikan pengaruh yang signifikan.
+
+Hasil ini menunjukkan bahwa kinerja kanal laten \texttt{moi} tidak banyak berubah 
+saat nilai $\beta$ diubah pada rentang yang diuji. Jadi, nilai $\beta=1$ sebagai 
+nilai standar masih bisa dipakai, tanpa perlu mencari parameter khusus untuk 
+mendapatkan kinerja kanal yang jelas berbeda.
+
+%=============================
+\section{Kinerja Metode Laten}
+\label{sec:kinerja-metode-laten}
+
+Selain akurasi dan efisiensi, fidelitas keluaran juga diperiksa melalui
+kemunculan jawaban dengan aksara non-Latin. Hasil pada
+Tabel~\ref{tab:b4-korupsi} menunjukkan bahwa \code{raw} menghasilkan enam
+kejadian, sedangkan \code{sample} tidak menghasilkan kejadian tersebut.
+Pada \code{soft} dan \code{moi}, masing-masing hanya terdapat satu kejadian.
+Hal ini menunjukkan bahwa perbedaan metode tidak hanya terlihat dari nilai
+akurasi dan efisiensi, tetapi juga pada bentuk keluaran yang dihasilkan.
+
+\input{build/assets/tables/b4_korupsi}
+
+Untuk melihat kinerja setiap metode secara keseluruhan, hasil akurasi,
+jumlah \textit{token}, waktu inferensi, dan fidelitas keluaran dirangkum pada
+Tabel~\ref{tab:b4-ringkas}.
+
+\input{build/assets/tables/b4_ringkas}
+
+Berdasarkan Tabel~\ref{tab:b4-ringkas}, acuan teks menghasilkan akurasi rerata
+sebesar $0{,}863$ dengan kebutuhan $974{,}3$ \textit{token} dan waktu
+inferensi $64{,}8$ detik per soal. Sementara itu, \code{moi} menghasilkan
+akurasi rerata $0{,}850$ dengan hanya $152{,}1$ \textit{token} dan waktu
+inferensi $15{,}1$ detik per soal. Artinya, dibandingkan acuan teks,
+\code{moi} mengurangi jumlah \textit{token} sekitar $84{,}4\%$ dan waktu
+inferensi sekitar $76{,}7\%$, dengan akurasi rerata yang tetap dekat dengan
+acuan.
+
+Akurasi MoI relatif tertinggi jika dibandingkan dengan metode laten lainnya, $0{,}837$ pada \code{soft},
+$0{,}847$ pada \code{sample}, dan $0{,}713$ pada \code{raw}. Selain itu,
+\code{moi} menggunakan jumlah \textit{token} paling sedikit, yaitu $152{,}1$
+per soal, serta hanya menghasilkan satu jawaban beraksara non-Latin.
+Kombinasi tersebut menunjukkan bahwa \code{moi} mampu mempertahankan kinerja
+mendekati acuan teks dengan kebutuhan sumber daya yang jauh lebih
+rendah. Hasil ini juga melengkapi analisis sebelumnya mengenai kedekatan
+geometris representasi dan kapasitas kanal laten, yang menunjukkan bahwa
+karakteristik representasi \code{moi} berkaitan dengan kemampuannya dalam
+mempertahankan informasi sekaligus mengurangi biaya komputasi.

@@ -1,0 +1,286 @@
+\pagenumbering{arabic}\setcounter{page}{1}
+\chapter{PENDAHULUAN}
+
+\section{Latar Belakang}
+
+Beberapa tahun terakhir ditandai oleh perkembangan kecerdasan buatan
+(\textit{artificial intelligence}, AI) yang berlangsung sangat pesat, baik
+pada layanan komersial berbayar maupun pada model \textit{open-weight}.
+Kapasitas komputasi AI global tumbuh rata-rata 3,3 kali per tahun sejak 2022
+dan mencapai 17,1 juta \textit{H100-equivalents} \citep{aiindex2026},
+sementara biaya inferensi untuk kemampuan yang setara dengan GPT-3.5 turun
+lebih dari 280 kali antara November 2022 dan Oktober 2024 \citep{aiindex2025}.
+
+\textit{Large Language Model} (LLM) menghasilkan teks secara autoregresif.
+Pada setiap langkah, model menghitung distribusi peluang atas seluruh
+kosakata, memilih satu \textit{token} diskret dari distribusi tersebut,
+menambahkannya ke rangkaian masukan, kemudian mengulangi proses yang sama
+untuk menghasilkan \textit{token} berikutnya \citep{vaswani}. Kemampuan
+penalaran model juga dibangun di atas mekanisme tersebut. Teknik
+\textit{chain-of-thought} mendorong model untuk menghasilkan langkah-langkah
+penalaran dalam bentuk teks sebelum menghasilkan jawaban akhir
+\citep{wei}, sehingga setiap langkah penalaran tetap diwujudkan melalui
+pemilihan \textit{token} diskret.
+
+Peran LLM kemudian berkembang dari sistem percakapan menjadi \textit{agent}.
+Model kini dapat melakukan pencarian informasi, terhubung dengan sumber data
+dan lingkungan eksternal melalui \textit{Model Context Protocol} (MCP),
+memanggil \textit{tools}, hingga mengoperasikan antarmuka komputer.
+\textit{Agent} merupakan sistem yang menerima suatu tujuan, menyusun rencana,
+dan melakukan tindakan sesuai lingkungan secara relatif otonom
+\citep{russellnorvig}.
+
+Beberapa agen kemudian dapat digabungkan ke dalam satu \textit{Multi-Agent
+System} (MAS). Setiap agen dapat diberikan peran yang berbeda dan saling
+bertukar informasi untuk menyelesaikan suatu tugas, sehingga keseluruhan
+sistem dapat dipandang sebagai suatu bentuk kolaborasi antarsistem yang
+menyerupai tim kerja \citep{wooldridge}. MAS berbasis LLM telah digunakan
+dalam berbagai tugas, termasuk penalaran matematika dan sains,
+\textit{question answering}, penggunaan \textit{tools}, hingga pengambilan
+keputusan \citep{guo}.
+
+Peningkatan kemampuan tersebut juga diikuti oleh peningkatan kebutuhan sumber
+daya komputasi. Model dengan kemampuan yang lebih tinggi pada umumnya
+membutuhkan kapasitas memori dan GPU yang lebih besar, sedangkan pada MAS
+suatu persoalan dapat diselesaikan melalui beberapa kali proses inferensi.
+Pada layanan komersial berbasis API, penggunaan model umumnya dikenai biaya
+berdasarkan jumlah \textit{token} masukan dan keluaran \citep{openaipricing,
+anthropicpricing}. Sementara itu, model \textit{open-weight} yang dijalankan
+pada GPU lokal maupun sewaan menimbulkan biaya berdasarkan durasi
+penggunaan sumber daya komputasi. Dengan demikian, pada kedua skema tersebut,
+pengurangan jumlah \textit{token} yang diproses dan waktu inferensi berpotensi
+menurunkan biaya penggunaan.
+
+Pertimbangan lain dalam penggunaan LLM adalah privasi dan keamanan data,
+karena penggunaan layanan tertutup mengharuskan data dikirim dan diproses
+melalui infrastruktur pihak ketiga. Di antara organisasi yang mengalami
+insiden keamanan terkait AI, 97\% menyatakan tidak memiliki kontrol akses AI
+yang memadai, sementara 63\% belum memiliki kebijakan tata kelola AI
+\citep{ibmbreach}. Model \textit{open-weight} yang dijalankan pada
+infrastruktur yang dikendalikan sendiri menjadi salah satu alternatif yang
+menarik, meskipun kemampuan model tersebut pada kondisi tertentu masih dapat
+berada di bawah model komersial.
+
+Pada MAS berbasis LLM, komunikasi antaragen umumnya berlangsung melalui teks,
+yaitu keluaran satu agen dituliskan sebagai rangkaian \textit{token} diskret
+sebelum digunakan sebagai masukan bagi agen berikutnya \citep{latentmas}.
+Pendekatan tersebut memiliki keunggulan dari sisi keterbacaan dan kemudahan
+interpretasi, tetapi memerlukan proses \textit{decoding} untuk menghasilkan
+teks dan pemrosesan kembali ketika teks tersebut digunakan sebagai masukan
+bagi agen berikutnya. Akibatnya, jumlah \textit{token} yang diproses dan waktu
+inferensi dapat meningkat seiring dengan bertambahnya panjang penalaran dan
+jumlah agen yang terlibat.
+
+Sejumlah penelitian kemudian berupaya mengurangi ketergantungan terhadap
+representasi token diskret pada dua bagian yang berbeda. Pada tingkat
+penalaran dalam satu agen, \textit{Soft Thinking} \citep{softthinking} dan
+LatentMAS \citep{latentmas} mengganti pemilihan token diskret dengan
+representasi pada ruang kontinu atau ruang laten. Pada \textit{Soft Thinking},
+masukan untuk langkah berikutnya dibentuk dari distribusi peluang token,
+sedangkan pada LatentMAS representasi tersebut dapat dibentuk langsung dari
+\textit{hidden state}. Pada tingkat
+komunikasi antaragen, LatentMAS meneruskan KV-\textit{cache} sebagai
+representasi keadaan internal dari satu agen ke agen berikutnya. Pendekatan-pendekatan tersebut berpotensi mengurangi
+penggunaan \textit{token} dan waktu inferensi, tetapi menghilangkan atau
+mengurangi representasi token diskret juga dapat memengaruhi akurasi sistem.
+
+\textit{Mixture of Inputs} (MoI) \citep{moi} menempuh pendekatan yang berbeda
+dengan mempertahankan kedua sumber informasi tersebut, yaitu distribusi
+peluang keluaran model dan token yang terpilih melalui proses
+\textit{sampling}. Dengan demikian, informasi mengenai kemungkinan token lain
+yang tersedia dalam distribusi model tidak sepenuhnya hilang setelah satu
+token dipilih. Penggabungan kedua sumber informasi tersebut diturunkan melalui
+pendekatan inferensi Bayes.
+
+Penelitian ini menguji kedua aspek tersebut secara bersamaan dalam satu
+rancangan eksperimen. Pada aspek penalaran, MoI \citep{moi} ditetapkan sebagai
+metode utama dan dibandingkan dengan tiga cara lain dalam membentuk
+representasi langkah penalaran, yaitu \textit{raw} sebagaimana digunakan oleh
+LatentMAS, \textit{soft}, dan \textit{sample} yang tetap memilih satu token.
+Pada aspek komunikasi, komunikasi berbasis teks dibandingkan dengan komunikasi
+berbasis KV-\textit{cache} sebagaimana digunakan oleh LatentMAS.
+
+Evaluasi dilakukan menggunakan model \textit{open-weight} Qwen3-8B
+\citep{qwen3} pada tiga \textit{benchmark}, yaitu GSM8K \citep{gsm8k},
+ARC-Challenge \citep{arc}, dan HumanEval+ \citep{evalplus}. Seluruh perlakuan
+dilakukan secara \textit{training-free} dan menggunakan konfigurasi bawaan
+masing-masing metode tanpa pencarian parameter. Dengan demikian, penelitian
+ini diarahkan untuk menjawab apakah Multi-Agent System dapat dibuat lebih
+efisien dalam penggunaan \textit{token} dan waktu inferensi dengan tetap
+mempertahankan tingkat akurasinya.
+
+
+\section{Pembatasan Masalah}
+
+Agar penelitian tetap terarah dan tidak meluas di luar ruang lingkup yang
+ditetapkan, penelitian ini dibatasi pada hal-hal berikut.
+
+\begin{enumerate}
+
+\item Model bahasa yang digunakan adalah Qwen3-8B dengan inferensi lokal.
+      Penelitian tidak menguji generalisasi terhadap ukuran maupun keluarga
+      model bahasa lainnya.
+
+\item Seluruh intervensi terhadap proses penalaran bersifat
+      \textit{training-free}. Tidak dilakukan perubahan bobot model,
+      \textit{fine-tuning}, maupun optimasi lainnya.
+
+\item Metode penalaran laten yang dibandingkan dibatasi pada
+      \textit{raw}, \textit{soft}, \textit{sample}, dan
+      \textit{Mixture of Inputs} (MoI).
+
+\item Medium komunikasi utama yang dibandingkan adalah komunikasi berbasis
+      teks dan komunikasi laten berbasis KV-\textit{cache}.
+
+\item Evaluasi kemampuan penalaran dibatasi pada GSM8K,
+      ARC-Challenge, dan HumanEval-Plus. Ketiga tugas digunakan untuk
+      merepresentasikan keluaran numerik, pilihan simbolik, dan
+      penulisan kode.
+
+\end{enumerate}
+
+
+\section{Tujuan dan Manfaat Penelitian}
+
+Sejalan dengan latar belakang yang telah diuraikan, penelitian ini bertujuan untuk:
+
+\begin{enumerate}
+
+      \item Merumuskan \textit{Mixture of Inputs} bersama tiga cara lain
+            membentuk langkah penalaran laten, yaitu \textit{raw},
+            \textit{soft}, dan \textit{sample}, ke dalam satu kerangka yang
+            sama sehingga keempatnya dapat dibandingkan secara adil pada model
+            Qwen3-8B, baik pada medium komunikasi berbasis teks maupun
+            KV-\textit{cache}.
+
+      \item Menganalisis efisiensi penggunaan token dan waktu inferensi dari
+            masing-masing metode komunikasi dan penalaran laten, baik
+            antara komunikasi berbasis teks dengan KV-\textit{cache} maupun antar-metode
+            KV-\textit{cache} itu sendiri.
+
+      \item Menganalisis hubungan antara efisiensi dan akurasi untuk
+            mengetahui metode yang memberikan keseimbangan paling baik antara
+            pengurangan biaya komputasi dan kemampuan penyelesaian tugas.
+
+\end{enumerate}
+
+
+Manfaat yang diharapkan adalah sebagai berikut.
+
+\begin{enumerate}
+    \item Memberikan kontribusi bagi kajian komunikasi antaragen berbasis LLM,
+          khususnya mengenai penggunaan representasi kontinu dan ruang laten
+          sebagai alternatif penalaran berbasis token diskret, sekaligus
+          bahan pembanding bagi penelitian lanjutan yang mengembangkan metode
+          komunikasi laten pada Multi-Agent System.
+    \item Menyediakan perbandingan beberapa metode komunikasi dan representasi
+          informasi dalam kondisi eksperimen yang terkendali, yaitu model dasar
+          dan \textit{benchmark} yang sama sehingga karakteristik
+          masing-masing metode dari segi akurasi, penggunaan token, dan waktu
+          inferensi dapat dipahami.
+    \item Mengetahui apakah pengurangan komunikasi berbasis teks melalui
+          representasi laten, khususnya \textit{Mixture of Inputs}, dapat
+          menghasilkan Multi-Agent System yang lebih cepat dan lebih murah
+          tanpa mengorbankan akurasi secara signifikan, sebagai pertimbangan
+          praktis dalam merancang sistem yang dijalankan pada model
+          \textit{open-weight} di infrastruktur lokal maupun \textit{cloud}
+          GPU.
+\end{enumerate}
+
+\section{Tinjauan Pustaka}
+
+Berikut beberapa literatur kunci yang menjadi acuan penelitian ini.
+
+\citet{latentmas} mengusulkan LatentMAS, kerangka kolaborasi
+\textit{multi-agent} di ruang laten dengan dua mekanisme yang dipakai
+penelitian ini. Pertama, menghasilkan pikiran laten di dalam satu agen: model
+menambahkan representasi lapisan terakhir secara autoregresif sebagai pengganti
+langkah pemilihan token, lalu menyelaraskannya kembali ke ruang \textit{embedding}
+masukan melalui pemetaan linear berbasis regresi \textit{ridge}. Kedua,
+pemindahan memori kerja antaragen: KV-\textit{cache} seluruh lapisan diteruskan
+dari satu agen ke agen berikutnya tanpa penulisan teks. Penelitian ini memakai
+mekanisme kedua sebagai medium komunikasi laten, dan mekanisme pertama sebagai
+salah satu formulasi penalaran yang dibandingkan (\textit{raw}).
+
+\citet{softthinking} mengusulkan \textit{soft thinking}, yang mengganti
+pemilihan token diskret selama penalaran dengan \textit{concept token} berupa
+kombinasi berbobot \textit{embedding} token menurut distribusi peluangnya.
+\citet{stochsoft} menelaah mekanisme kerjanya dan menunjukkan bahwa penalaran
+lunak yang deterministik cenderung terkunci pada token berpeluang tertinggi.
+Penelitian ini membandingkan kedua sisi tersebut secara langsung: formulasi
+\textit{soft} yang mempertahankan seluruh distribusi dan formulasi
+\textit{sample} yang mengambil satu token melalui \textit{sampling}.
+
+\citet{moi} mengusulkan \textit{Mixture of Inputs} dan memandang pembentukan
+masukan bagi langkah berikutnya sebagai persoalan inferensi Bayes. Distribusi
+peluang keluaran model diperlakukan sebagai parameter konsentrasi
+\textit{prior} Dirichlet dan token hasil pengambilan sampel sebagai satu
+observasi multinomial, sehingga melalui kekonjugatan Dirichlet--Multinomial
+diperoleh \textit{posterior} berbentuk tertutup. Masukan bagi langkah
+berikutnya dibentuk dari ekspektasi \textit{posterior} $\mathbb{E}[w\mid\cdot]$
+atas bobot campuran tersebut, dengan besar kontribusi \textit{prior} relatif
+terhadap observasi diatur oleh entropi distribusi, yaitu oleh tingkat
+keyakinan model, sehingga metode tersebut menyesuaikan diri tanpa penalaan
+parameter. MoI dirancang untuk penalaran satu model dan belum diuji sebagai
+mekanisme komunikasi pada sistem \textit{multi-agent}; celah itulah yang
+menjadi titik tolak penelitian ini.
+
+\citet{coconut} dan survei \citet{latentsurvey} menempatkan ketiga pendekatan
+di atas dalam paradigma penalaran laten yang lebih luas, yaitu pemindahan
+langkah penalaran dari barisan token diskret ke ruang representasi kontinu.
+
+
+\section{Metodologi Penelitian}
+
+Metodologi yang digunakan adalah studi literatur dan eksperimen terkendali.
+Studi literatur dilakukan dengan menelaah publikasi mengenai penalaran laten,
+kolaborasi \textit{multi-agent}, dan evaluasi model bahasa, kemudian
+menurunkan persamaan langkah laten tiap metode dari sumber aslinya ke dalam
+satu kerangka notasi yang sama. Eksperimen dilakukan dengan menjalankan sistem
+\textit{multi-agent} berbasis model \textit{open-weight} Qwen3-8B pada tolok
+ukur GSM8K, ARC-Challenge, dan HumanEval+. Medium komunikasi antaragen dan
+formulasi representasi laten diperlakukan sebagai faktor yang divariasikan,
+sedangkan model, topologi agen, \textit{prompt}, banyaknya langkah laten,
+suhu. Seluruh kondisi dievaluasi pada soal yang sama sehingga perbandingannya bersifat berpasangan.
+% Analisis dilakukan menggunakan uji statistik nonparametrik yang sesuai untuk
+% data berpasangan, disertai selang kepercayaan \textit{bootstrap} dan koreksi
+% terhadap perbandingan berganda. Seluruh komputasi dilakukan menggunakan bahasa Python.
+
+\section{Sistematika Penulisan}
+
+Penyusunan laporan ini mengacu pada sistematika berikut.
+
+\noindent\textsc{Bab I Pendahuluan}
+
+Bab ini berisi latar belakang, pembatasan masalah, tujuan dan manfaat
+penelitian, tinjauan pustaka, metodologi penelitian, dan sistematika
+penulisan.
+
+\noindent\textsc{Bab II Landasan Teori}
+
+Bab ini menguraikan dasar teori yang digunakan, mencakup probabilitas dan
+distribusi yang relevan, teori informasi, inferensi Bayes, aljabar linear dan
+representasi vektor, arsitektur \textit{transformer} beserta KV-\textit{cache},
+penalaran laten dan keempat formulasi pembentukan representasi laten, sistem
+\textit{multi-agent}, konsep evaluasi empiris model bahasa, dan pengujian
+statistik yang dipakai.
+
+\noindent\textsc{Bab III Metodologi Penelitian}
+
+Bab ini menetapkan objek penelitian berupa persamaan langkah laten,
+menurunkan keempat persamaan yang dibandingkan ke dalam satu kerangka bersama,
+menyatakan rancangan dua sumbu eksperimen, hipotesis, data dan tugas evaluasi,
+protokol pengambilan sampel berpasangan, metrik, serta prosedur analisis
+statistik.
+
+\noindent\textsc{Bab IV Hasil dan Pembahasan}
+
+Bab ini menyajikan hasil eksperimen beserta pembahasannya, mencakup
+perbandingan akurasi antar-persamaan, keterbedaan hasil menurut jenis tugas,
+biaya komputasi medium laten, fidelitas simbolik keluaran, bukti mekanisme
+yang menjelaskan pola hasil, serta batas berlaku seluruh temuan.
+
+\noindent\textsc{Bab V Kesimpulan dan Saran}
+
+Bab ini memuat kesimpulan yang menjawab tujuan penelitian beserta saran bagi
+penelitian selanjutnya.
