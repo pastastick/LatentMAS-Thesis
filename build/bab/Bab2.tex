@@ -93,39 +93,6 @@ diperoleh melalui
 \end{equation}
 \end{definisi}
 
-\subsection{Fungsi Distribusi Kumulatif}
-\label{subsec:cdf}
-
-Fungsi distribusi kumulatif (\textit{cumulative distribution function},
-CDF) menyatakan peluang bahwa suatu variabel random mengambil nilai
-yang tidak lebih besar daripada suatu nilai tertentu.
-
-\begin{definisi}[\citealp{bain}]
-\label{def:cdf}
-Fungsi distribusi kumulatif dari variabel random $X$ didefinisikan
-sebagai
-\begin{equation}
-    F_X(x)=P(X\leq x),\qquad x\in\mathbb{R}.
-    \label{eq:cdf}
-\end{equation}
-\end{definisi}
-
-Fungsi distribusi kumulatif bersifat monoton tak turun dan kontinu
-kanan, serta memenuhi
-\begin{equation}
-    \lim_{x\to-\infty}F_X(x)=0,
-    \qquad
-    \lim_{x\to\infty}F_X(x)=1.
-    \label{eq:sifatcdf}
-\end{equation}
-
-Untuk variabel random diskret dengan fungsi massa peluang $p_X$,
-fungsi distribusi kumulatif dapat dituliskan sebagai
-\begin{equation}
-    F_X(x)=\sum_{\substack{t\in\mathcal{X}\\t\leq x}}p_X(t).
-    \label{eq:cdfdiskret}
-\end{equation}
-
 
 \section{Ekspektasi dan Variansi}
 
@@ -192,7 +159,7 @@ ekspektasinya dapat dihitung secara terpisah.
 \label{subsec:ekspektasivektor}
 
 Ekspektasi suatu vektor random diperoleh dengan menghitung ekspektasi dari setiap komponennya. 
-Dengan demikian, setiap komponen pada vektor ekspektasi menyatakan nilai harapan dari komponen 
+Setiap komponen pada vektor ekspektasi menyatakan nilai harapan dari komponen 
 vektor random yang bersesuaian. Sehingga untuk vektor random $\bm{X}$,
 Ekspektasinya adalah
 
@@ -292,16 +259,13 @@ linear antara $X$ dan $Y$ semakin lemah.
 
 
 \section{Matriks}
-
 \label{sec:matriks}
 
 \subsection{Jenis dan Operasi Matriks}
-
 \label{subsec:jenismatriks}
 
 \begin{definisi}[\citealp{anton}]
 \label{def:matriks}
-
 Matriks berordo $m\times n$ adalah susunan bilangan real dalam $m$ baris
 dan $n$ kolom, yang dinotasikan sebagai
 \begin{equation}
@@ -309,22 +273,21 @@ A=[a_{ij}]\in\mathbb{R}^{m\times n},
 \label{eq:matriks}
 \end{equation}
 dengan $a_{ij}$ menyatakan elemen pada baris ke-$i$ dan kolom ke-$j$.
-
 \end{definisi}
 
-Matriks bujur sangkar memiliki jumlah baris dan kolom yang sama. Beberapa
-jenis matriks bujur sangkar yang umum digunakan adalah matriks identitas,
-matriks diagonal, dan matriks simetris. Matriks identitas $I$ memiliki
-elemen diagonal utama bernilai satu dan elemen lainnya bernilai nol.
-Matriks diagonal memiliki elemen bernilai nol di luar diagonal utama,
-sedangkan matriks simetris memenuhi $A^\top=A$.
+Matriks bujur sangkar memiliki jumlah baris dan kolom yang sama. Matriks
+identitas $I$ memiliki elemen diagonal utama bernilai satu dan elemen
+lainnya bernilai nol. Matriks diagonal memiliki elemen bernilai nol di
+luar diagonal utama, sedangkan matriks simetris memenuhi $A^\top=A$.
 
 Operasi dasar matriks meliputi penjumlahan, perkalian dengan skalar, dan
 perkalian antarmatriks. Untuk matriks $A=[a_{ij}]$ dan $B=[b_{ij}]$
 yang berordo sama, serta skalar $c\in\mathbb{R}$, berlaku
 \begin{align}
-(A+B)_{ij} &= a_{ij}+b_{ij}, \label{eq:penjumlahanmatriks}\\
-(cA)_{ij} &= ca_{ij}. \label{eq:perkalianskalar}
+(A+B)_{ij} &= a_{ij}+b_{ij},
+\label{eq:penjumlahanmatriks}\\
+(cA)_{ij} &= ca_{ij}.
+\label{eq:perkalianskalar}
 \end{align}
 Jika $A\in\mathbb{R}^{m\times n}$ dan
 $C\in\mathbb{R}^{n\times p}$, perkalian matriks didefinisikan sebagai
@@ -336,15 +299,56 @@ Penjumlahan memerlukan kedua matriks berordo sama, sedangkan perkalian
 memerlukan jumlah kolom matriks pertama sama dengan jumlah baris matriks
 kedua.
 
+\begin{definisi}[\citealp{anton}]
+\label{def:trace}
+Trace dari matriks bujur sangkar $A\in\mathbb{R}^{n\times n}$ adalah
+jumlah elemen pada diagonal utamanya, yaitu
+\begin{equation}
+\operatorname{tr}(A)=\sum_{i=1}^{n}a_{ii}.
+\label{eq:trace}
+\end{equation}
+Trace menghasilkan skalar dan hanya didefinisikan di sini untuk matriks
+bujur sangkar.
+\end{definisi}
+
+\begin{definisi}[\citealp{anton}]
+\label{def:hadamard}
+Perkalian Hadamard dua matriks $A,B\in\mathbb{R}^{m\times n}$ adalah
+perkalian elemen demi elemen yang dinotasikan dengan $\odot$, dengan
+\begin{equation}
+A\odot B=[a_{ij}b_{ij}]\in\mathbb{R}^{m\times n}.
+\label{eq:hadamard}
+\end{equation}
+Perkalian ini mensyaratkan kedua matriks memiliki ordo yang sama dan
+berbeda dari perkalian matriks biasa.
+\end{definisi}
+
+\begin{definisi}[\citealp{anton}]
+\label{def:normafrobenius}
+Norma Frobenius kuadrat dari matriks $A\in\mathbb{R}^{m\times n}$
+didefinisikan sebagai jumlah kuadrat seluruh elemennya,
+\begin{equation}
+\lVert A\rVert_F^2
+=\sum_{i=1}^{m}\sum_{j=1}^{n}a_{ij}^{2}
+=\operatorname{tr}(A^\top A).
+\label{eq:normafrobenius}
+\end{equation}
+Nilai ini merupakan skalar taknegatif yang bernilai nol jika dan hanya
+jika $A$ merupakan matriks nol.
+\end{definisi}
+
 
 \section{Vektor}
 \label{sec:vektor}
 
 \begin{definisi}[\citealp{anton}]
 \label{def:vektor}
-\textit{Vektor} berdimensi $n$ adalah unsur $\mathbb{R}^{n}$, dituliskan
-sebagai matriks kolom $x=(x_1,\dots,x_n)^{\top}\in\mathbb{R}^{n\times 1}$
-atau matriks baris $x^{\top}\in\mathbb{R}^{1\times n}$.
+Vektor berdimensi $n$ adalah unsur $\mathbb{R}^{n}$, dituliskan sebagai
+matriks kolom
+\begin{equation}
+x=(x_1,\ldots,x_n)^\top\in\mathbb{R}^{n}.
+\label{eq:vektor}
+\end{equation}
 \end{definisi}
 
 \subsection{Hasil Kali Dalam dan Norma Euklides}
@@ -352,143 +356,142 @@ atau matriks baris $x^{\top}\in\mathbb{R}^{1\times n}$.
 
 \begin{definisi}[\citealp{anton}]
 \label{def:hasilkalidalam}
-\textit{Hasil kali dalam} (\textit{dot product}) dua vektor
+Hasil kali dalam (\textit{dot product}) dua vektor
+$x,y\in\mathbb{R}^{n}$ adalah skalar
 \begin{equation}
-  x=
-  \begin{pmatrix} x_1\\ x_2\\ \vdots\\ x_n \end{pmatrix},
-  \qquad
-  y=
-  \begin{pmatrix} y_1\\ y_2\\ \vdots\\ y_n \end{pmatrix}
-  \in \mathbb{R}^{n}
-  \label{eq:vektorxy}
-\end{equation}
-adalah skalar
-\begin{equation}
-  \langle x,y\rangle = x^{\top}y = \sum_{i=1}^{n} x_i y_i.
-  \label{eq:hasilkalidalam}
+\langle x,y\rangle
+=x^\top y
+=\sum_{i=1}^{n}x_i y_i.
+\label{eq:hasilkalidalam}
 \end{equation}
 \end{definisi}
 
 \begin{definisi}[\citealp{anton}]
 \label{def:normaeuklides}
-\textit{Norma Euklides} vektor $x\in\mathbb{R}^{n}$ adalah
+Norma Euklides vektor $x\in\mathbb{R}^{n}$ adalah
 \begin{equation}
-  \lVert x\rVert = \sqrt{\langle x,x\rangle}
-  = \Bigl(\sum_{i=1}^{n} x_i^{2}\Bigr)^{1/2}.
-  \label{eq:normaeuklides}
+\lVert x\rVert_2
+=\sqrt{\langle x,x\rangle}
+=\left(\sum_{i=1}^{n}x_i^2\right)^{1/2}.
+\label{eq:normaeuklides}
 \end{equation}
+Norma ini mengukur panjang vektor dan bernilai nol jika dan hanya jika
+$x$ merupakan vektor nol.
 \end{definisi}
 
 \begin{definisi}[Ketaksamaan Cauchy--Schwarz; \citealp{anton}]
-\label{teo:cauchyschwarz}
-Untuk setiap $x=(x_1,\dots,x_n)^{\top},y=(y_1,\dots,y_n)^{\top}\in\mathbb{R}^{n}$,
+\label{def:cauchyschwarz}
+Untuk setiap $x,y\in\mathbb{R}^{n}$ berlaku
 \begin{equation}
-  \lvert\langle x,y\rangle\rvert \le \lVert x\rVert\,\lVert y\rVert,
-  \label{eq:cauchyschwarz}
+|\langle x,y\rangle|
+\leq \lVert x\rVert_2\lVert y\rVert_2.
+\label{eq:cauchyschwarz}
 \end{equation}
-yakni, dalam bentuk komponen,
-\begin{equation}
-  \Bigl\lvert \sum_{i=1}^{n} x_i y_i \Bigr\rvert
-  \;\le\;
-  \Bigl(\sum_{i=1}^{n} x_i^{2}\Bigr)^{1/2}
-  \Bigl(\sum_{i=1}^{n} y_i^{2}\Bigr)^{1/2}.
-  \label{eq:cauchyschwarzkomponen}
-\end{equation}
+Akibatnya, untuk vektor taknol, nilai hasil kali dalam yang telah
+dinormalisasi oleh panjang kedua vektor berada di antara $-1$ dan $1$.
 \end{definisi}
-
 
 \subsection{Kosinus Sudut Antar-Vektor}
 \label{subsec:kosinus}
 
 \begin{definisi}[\citealp{anton}]
 \label{def:kosinus}
-Untuk $x,y\in\mathbb{R}^{n}$ taknol, \textit{kosinus sudut} antara $x$ dan $y$
-adalah
+Untuk vektor taknol $x,y\in\mathbb{R}^{n}$, kosinus sudut antara
+keduanya didefinisikan sebagai
 \begin{equation}
-  \cos(x,y) = \frac{\langle x,y\rangle}{\lVert x\rVert\,\lVert y\rVert}
-  =
-  \frac{\displaystyle\sum_{i=1}^{n}x_iy_i}
-       {\displaystyle\Bigl(\sum_{i=1}^{n}x_i^{2}\Bigr)^{1/2}
-        \Bigl(\sum_{i=1}^{n}y_i^{2}\Bigr)^{1/2}}.
-  \label{eq:kosinus}
+\cos(x,y)
+=\frac{\langle x,y\rangle}
+{\lVert x\rVert_2\lVert y\rVert_2}
+=\frac{\displaystyle\sum_{i=1}^{n}x_i y_i}
+{\displaystyle
+\left(\sum_{i=1}^{n}x_i^2\right)^{1/2}
+\left(\sum_{i=1}^{n}y_i^2\right)^{1/2}}.
+\label{eq:kosinus}
 \end{equation}
 \end{definisi}
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[scale=1.2]
-  \draw[->, thin, gray] (-0.3,0) -- (3.2,0);
-  \draw[->, thin, gray] (0,-0.3) -- (0,2.5);
-  \draw[->, thick] (0,0) -- (2.8,0.6) node[right] {$x$};
-  \draw[->, thick] (0,0) -- (1.6,2.2) node[above] {$y$};
-  \draw (0.9,0.19) arc (12:54:0.93);
-  \node at (0.96,0.63) {$\theta$};
-\end{tikzpicture}
-\caption{Sudut $\theta$ antara dua vektor $x,y\in\mathbb{R}^{2}$; menurut
-Persamaan~\eqref{eq:kosinus}, $\cos\theta=\cos(x,y)$.}
-\label{fig:kosinus}
-\end{figure}
+Berdasarkan Definisi~\ref{def:cauchyschwarz},
+$-1\leq\cos(x,y)\leq 1$. Nilai $1$ menunjukkan bahwa kedua vektor
+searah, nilai $-1$ menunjukkan bahwa keduanya berlawanan arah, dan
+nilai $0$ menunjukkan bahwa hasil kali dalamnya nol sehingga keduanya
+ortogonal. Dalam penelitian ini, kosinus digunakan untuk mengukur
+kemiripan arah antara representasi vektor.
 
-Untuk setiap $x,y$ taknol, definisi~\ref{teo:cauchyschwarz} memberikan
-$-1\le\cos(x,y)\le 1$; $\cos(x,y)=1$ apabila $x=cy$ untuk suatu $c>0$
-(searah), dan $\cos(x,y)=0$ apabila $\langle x,y\rangle=0$ (ortogonal). Pada
-Gambar~\ref{fig:kosinus} kedua kasus berturut-turut bersesuaian dengan
-$\theta=0$ dan $\theta=90^{\circ}$.
+
+\section{Tensor}
+\label{sec:tensor}
+
+\begin{definisi}
+\label{def:tensor}
+Tensor adalah susunan elemen yang diindeks oleh satu atau lebih indeks.
+Skalar merupakan tensor orde nol, vektor merupakan tensor orde satu,
+dan matriks merupakan tensor orde dua. Secara umum, tensor berordo
+$(d_1,\ldots,d_k)$ dapat dinotasikan sebagai
+\begin{equation}
+\mathcal{X}\in
+\mathbb{R}^{d_1\times d_2\times\cdots\times d_k},
+\label{eq:tensor}
+\end{equation}
+dengan $k$ menyatakan orde tensor dan $d_j$ menyatakan ukuran dimensi
+ke-$j$.
+\end{definisi}
+
+\begin{definisi}[Konkatenasi Tensor; \citealp{pytorchcat}]
+\label{def:konkatenasi}
+
+Konkatenasi (\textit{concatenation}) adalah operasi menggabungkan
+dua tensor sepanjang dimensi tertentu tanpa menjumlahkan elemen-elemennya.
+Misalkan tensor $X$ dan $Y$ memiliki ukuran yang sama pada seluruh
+dimensi selain dimensi ke-$r$. Konkatenasi keduanya pada dimensi
+tersebut dinotasikan sebagai
+\begin{equation}
+Z=\operatorname{concat}_r(X,Y).
+\label{eq:konkatenasi}
+\end{equation}
+Ukuran tensor hasil pada dimensi ke-$r$ merupakan jumlah ukuran
+kedua tensor pada dimensi tersebut, sedangkan ukuran dimensi lainnya
+tetap.
+
+Sebagai ilustrasi, untuk
+\[
+X=
+\begin{bmatrix}
+1 & 2\\
+3 & 4
+\end{bmatrix},
+\qquad
+Y=
+\begin{bmatrix}
+5\\
+6
+\end{bmatrix},
+\]
+konkatenasi secara horizontal menghasilkan
+\[
+\operatorname{concat}_2(X,Y)
+=
+\begin{bmatrix}
+1 & 2 & 5\\
+3 & 4 & 6
+\end{bmatrix}.
+\]
+Konkatenasi mempertahankan nilai dan urutan relatif elemen tensor
+asal. Operasi ini mensyaratkan ukuran kedua tensor sama pada dimensi
+selain dimensi yang digabungkan. Berbeda dari konkatenasi,
+penjumlahan tensor menggabungkan nilai elemen yang bersesuaian dan
+mensyaratkan ukuran kedua tensor sama.
+
+\end{definisi}
 
 
 \section{Distribusi}
 \label{sec:distribusi}
 
-\subsection{Distribusi Kategorik dan Vektor Indikator}
-
-\label{subsec:distribusikategorik}
-
-Distribusi kategorik dapat dipandang sebagai kasus khusus distribusi
-multinomial dengan satu percobaan. Misalkan variabel random $Y$
-mengambil nilai dalam himpunan $\{1,\ldots,V\}$.
-
-\begin{definisi}[\citealp{casella}]
-\label{def:kategorik}
-Variabel random $Y$ dikatakan berdistribusi kategorik dengan parameter
-$\bm{p}=(p_1,\ldots,p_V)^\top$ jika fungsi massa probabilitasnya
-memenuhi
-\begin{equation}
-P(Y=i)=p_i,\qquad i=1,\ldots,V,
-\label{eq:kategorik}
-\end{equation}
-dengan $p_i\geq 0$ untuk setiap $i$ dan
-$\sum_{i=1}^{V}p_i=1$.
-\end{definisi}
-
-Setiap kategori $i$ dapat direpresentasikan menggunakan vektor
-indikator atau vektor \textit{one-hot} $\bm{e}_i\in\{0,1\}^V$,
-yang didefinisikan sebagai
-\begin{definisi}
-\label{def:onehot}
-Vektor indikator $\bm{e}_i$ untuk kategori ke-$i$ merupakan vektor
-berdimensi $V$ yang komponen ke-$i$-nya bernilai satu dan seluruh
-komponen lainnya bernilai nol. Secara matematis,
-\begin{equation}
-(\bm{e}_i)_j=
-\begin{cases}
-1, & j=i,\\
-0, & j\neq i.
-\end{cases}
-\label{eq:vektorindikator}
-\end{equation}
-\end{definisi}
-
-Setiap vektor indikator memiliki tepat satu komponen
-bernilai satu, sedangkan komponen lainnya bernilai nol. Jika $Y$
-merupakan variabel random dengan distribusi kategorik, maka $\bm{e}_Y$
-menyatakan vektor indikator untuk kategori yang terpilih, sedangkan
-vektor $\bm{p}$ menyatakan probabilitas untuk seluruh kategori.
 
 \subsection{Distribusi Multinomial}
 \label{subsec:distribusimultinomial}
 
-Distribusi multinomial merupakan perluasan distribusi kategorik untuk
-memodelkan peluang kemunculan setiap kategori dalam sejumlah percobaan
+Distribusi multinomial memodelkan peluang kemunculan setiap kategori dalam sejumlah percobaan
 independen. Misalkan $Y_1,\ldots,Y_n$ merupakan variabel random
 independen dan berdistribusi identik secara kategorik dengan parameter
 $\bm{p}=(p_1,\ldots,p_V)^\top$.
@@ -542,285 +545,166 @@ Bentuk likelihood tersebut digunakan untuk memperoleh distribusi
 posterior ketika distribusi prior bagi $\bm{\theta}$ mengikuti
 distribusi Dirichlet.
 
-\subsection{Distribusi Beta}
+\subsection{Distribusi Kategorik dan Vektor Indikator}
 
-\label{subsec:distribusibeta}
+\label{subsec:distribusikategorik}
 
-Distribusi Beta merupakan salah satu distribusi kontinu yang banyak digunakan
-untuk memodelkan parameter yang nilainya berada pada interval $(0,1)$.
-Distribusi ini memiliki dua parameter bentuk, yaitu $a$ dan $b$. Sebelum
-mendefinisikan distribusi Beta, diperlukan dua fungsi yang berkaitan dengan
-konstanta normalisasinya, yaitu fungsi Gamma dan fungsi Beta.
+Distribusi kategorik dapat dipandang sebagai kasus khusus distribusi
+multinomial dengan satu percobaan. Misalkan variabel random $Y$
+mengambil nilai dalam himpunan $\{1,\ldots,V\}$.
 
 \begin{definisi}[\citealp{casella}]
-
-\label{def:gamma}
-
-Fungsi Gamma didefinisikan sebagai
-
+\label{def:kategorik}
+Variabel random $Y$ dikatakan berdistribusi kategorik dengan parameter
+$\bm{p}=(p_1,\ldots,p_V)^\top$ jika fungsi massa probabilitasnya
+memenuhi
 \begin{equation}
-\Gamma(a)
-=
-\int_0^\infty t^{a-1}e^{-t}\,dt,
+P(Y=i)=p_i,\qquad i=1,\ldots,V,
+\label{eq:kategorik}
+\end{equation}
+dengan $p_i\geq 0$ untuk setiap $i$ dan
+$\sum_{i=1}^{V}p_i=1$.
+\end{definisi}
+
+Setiap kategori $i$ dapat direpresentasikan menggunakan vektor
+indikator atau vektor \textit{one-hot} $\bm{e}_i\in\{0,1\}^V$,
+yang didefinisikan sebagai
+\begin{definisi}
+\label{def:onehot}
+Vektor indikator $\bm{e}_i$ untuk kategori ke-$i$ merupakan vektor
+berdimensi $V$ yang komponen ke-$i$-nya bernilai satu dan seluruh
+komponen lainnya bernilai nol. Secara matematis,
+\begin{equation}
+(\bm{e}_i)_j=
+\begin{cases}
+1, & j=i,\\
+0, & j\neq i.
+\end{cases}
+\label{eq:vektorindikator}
+\end{equation}
+\end{definisi}
+
+Setiap vektor indikator memiliki tepat satu komponen
+bernilai satu, sedangkan komponen lainnya bernilai nol. Jika $Y$
+merupakan variabel random dengan distribusi kategorik, maka $\bm{e}_Y$
+menyatakan vektor indikator untuk kategori yang terpilih, sedangkan
+vektor $\bm{p}$ menyatakan probabilitas untuk seluruh kategori.
+
+
+\subsection{Distribusi Beta}
+\label{subsec:distribusibeta}
+
+Distribusi Beta merupakan distribusi kontinu yang digunakan untuk
+memodelkan variabel random pada interval $(0,1)$. Distribusi ini
+memiliki dua parameter, yaitu $a,b>0$. Fungsi Gamma dan
+fungsi Beta digunakan untuk menyatakan konstanta normalisasi
+distribusi tersebut \citep{casella}.
+
+\begin{definisi}[\citealp{casella}]
+\label{def:gamma}
+Fungsi Gamma didefinisikan sebagai
+\begin{equation}
+\Gamma(a)=\int_0^\infty t^{a-1}e^{-t}\,dt,
 \qquad a>0.
 \label{eq:gamma}
 \end{equation}
-
-\end{definisi}
-
-Salah satu sifat penting dari fungsi Gamma adalah hubungan rekursif
-
+Fungsi ini memenuhi sifat rekursif
 \begin{equation}
 \Gamma(a+1)=a\Gamma(a).
 \label{eq:gammarekursif}
 \end{equation}
-
-Sifat tersebut diperoleh lewat integrasi parsial pada
-Persamaan~\eqref{eq:gamma}: dengan $u=t^a$ dan $dv=e^{-t}dt$ (sehingga
-$du=at^{a-1}dt$ dan $v=-e^{-t}$),
-\begin{align}
-\Gamma(a+1)
-= \int_0^\infty t^a e^{-t}\,dt
-= \left[-t^ae^{-t}\right]_0^\infty + a\int_0^\infty t^{a-1}e^{-t}\,dt
-= a\Gamma(a).
-\end{align}
-
-Khusus untuk bilangan bulat positif $n$, karena $\Gamma(1)=\int_0^\infty
-e^{-t}\,dt=1$, sifat rekursif tersebut memberikan
-$\Gamma(n)=(n-1)\Gamma(n-1)=(n-1)(n-2)\Gamma(n-2)=\cdots=(n-1)!$, sehingga
-fungsi Gamma dapat dipandang sebagai perluasan konsep faktorial ke nilai
-parameter yang tidak harus berupa bilangan bulat.
-
-Selanjutnya, fungsi Beta didefinisikan menggunakan fungsi Gamma.
+Untuk bilangan bulat positif $n$, berlaku $\Gamma(n)=(n-1)!$.
+\end{definisi}
 
 \begin{definisi}[\citealp{casella}]
-
 \label{def:betafungsi}
-
 Fungsi Beta didefinisikan sebagai
-
 \begin{equation}
-B(a,b)
-=
-\frac{\Gamma(a)\Gamma(b)}
-{\Gamma(a+b)},
+B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)},
 \qquad a,b>0.
 \label{eq:betafungsi}
 \end{equation}
-
-Fungsi tersebut juga dapat dituliskan dalam bentuk integral sebagai
-
+Fungsi ini juga memiliki representasi integral
 \begin{equation}
-B(a,b)
-=
-\int_0^1
-x^{a-1}(1-x)^{b-1}\,dx.
+B(a,b)=\int_0^1 x^{a-1}(1-x)^{b-1}\,dx.
 \label{eq:betaintegral}
 \end{equation}
-
 \end{definisi}
 
-Bentuk integral pada Persamaan~\eqref{eq:betaintegral} nantinya digunakan
-untuk menghitung integral yang muncul pada distribusi Beta.
-
 \begin{definisi}[\citealp{bain}]
-
 \label{def:distribusibeta}
-
-Variabel random kontinu $X$ dikatakan berdistribusi Beta dengan parameter
-$a,b>0$, ditulis
-
-\[
-X\sim\operatorname{Beta}(a,b),
-\]
-
-jika fungsi kepadatannya adalah
-
+Variabel random kontinu $X$ berdistribusi Beta dengan parameter
+$a,b>0$, ditulis $X\sim\operatorname{Beta}(a,b)$, apabila fungsi
+kepadatan probabilitasnya adalah
 \begin{equation}
-f(x;a,b)
-=
-\frac{1}{B(a,b)}
-x^{a-1}(1-x)^{b-1},
+f(x;a,b)=
+\frac{x^{a-1}(1-x)^{b-1}}{B(a,b)},
 \qquad 0<x<1.
 \label{eq:distribusibeta}
 \end{equation}
-
-\end{definisi}
-
-Faktor $1/B(a,b)$ pada Persamaan~\eqref{eq:distribusibeta} berfungsi sebagai
-konstanta normalisasi sehingga total luas di bawah fungsi kepadatan pada
-interval $(0,1)$ bernilai satu.
-
-Salah satu sifat distribusi Beta yang akan digunakan adalah nilai
-ekspektasinya. Berdasarkan definisi ekspektasi untuk variabel random
-kontinu~\eqref{eq:hargaharapan} dan fungsi kepadatan pada Persamaan~\eqref{eq:distribusibeta},
-\begin{align}
-\mathbb{E}[X]
-= \int_0^1 x f(x;a,b)\,dx
-= \frac{1}{B(a,b)}\int_0^1 x^a(1-x)^{b-1}\,dx
-= \frac{B(a+1,b)}{B(a,b)},
-\end{align}
-karena faktor $x$ dari definisi ekspektasi bergabung dengan $x^{a-1}$ dari
-kepadatan menjadi $x^a$, dan berdasarkan fungsi Beta pada
-Persamaan~\eqref{eq:betaintegral} dengan parameter pertama $a+1$.
-Menguraikan $B(a+1,b)$ dan $B(a,b)$ memakai definisi fungsi Beta pada
-Persamaan~\eqref{eq:betafungsi} dan menyederhanakan faktor $\Gamma(b)$
-yang sama pada pembilang dan penyebut,
-\begin{align}
-\mathbb{E}[X]
-= \frac{\Gamma(a+1)\Gamma(b)/\Gamma(a+b+1)}{\Gamma(a)\Gamma(b)/\Gamma(a+b)}
-= \frac{\Gamma(a+1)}{\Gamma(a)}\cdot\frac{\Gamma(a+b)}{\Gamma(a+b+1)}.
-\end{align}
-Menerapkan sifat rekursif Gamma, $\Gamma(a+1)=a\Gamma(a)$ dan
-$\Gamma(a+b+1)=(a+b)\Gamma(a+b)$, kedua faktor Gamma saling menghilangkan
-dan
+Ekspektasi distribusi Beta diberikan oleh
 \begin{equation}
-\mathbb{E}[X] = \frac{a}{a+b}.
+\mathbb{E}[X]=\frac{a}{a+b}.
 \label{eq:ekspektasibeta}
 \end{equation}
-Hasil ini menunjukkan bahwa parameter $a$ dan $b$ menentukan posisi
-rata-rata distribusi Beta pada interval $(0,1)$, sehingga nilai ekspektasi semakin
-besar ketika $a$ semakin besar relatif terhadap $b$.
+\end{definisi}
+
 
 \subsection{Distribusi Dirichlet}
 \label{subsec:distribusidirichlet}
 
+Distribusi Dirichlet merupakan perluasan distribusi Beta ke vektor
+probabilitas dengan lebih dari dua komponen. Distribusi ini digunakan
+untuk memodelkan vektor random yang berada pada simpleks probabilitas
+\citep{gelman}.
+
 \begin{definisi}[\citealp{gelman}]
 \label{def:betafungsimultivariat}
-Untuk $\alpha=(\alpha_1,\dots,\alpha_V)$, $\alpha_i>0$, dan
-$\alpha_0=\sum_{i=1}^{V}\alpha_i$, \textit{fungsi Beta multivariat} adalah
+Untuk parameter $\alpha=(\alpha_1,\ldots,\alpha_V)$ dengan
+$\alpha_i>0$, definisikan
+$\alpha_0=\sum_{i=1}^{V}\alpha_i$. Fungsi Beta multivariat adalah
 \begin{equation}
-  B(\alpha) = \frac{\prod_{i=1}^{V}\Gamma(\alpha_i)}{\Gamma(\alpha_0)}.
-  \label{eq:betafungsimultivariat}
+B(\alpha)=
+\frac{\prod_{i=1}^{V}\Gamma(\alpha_i)}
+{\Gamma(\alpha_0)}.
+\label{eq:betafungsimultivariat}
 \end{equation}
 \end{definisi}
-
-Fungsi Beta multivariat muncul sebagai konstanta normalisasi kepadatan
-Dirichlet, karena berlaku identitas
-(dikenal sebagai \textit{Integral Dirichlet})
-\begin{equation}
-  \int_{\Delta^{V-1}} \prod_{i=1}^{V}\theta_i^{\alpha_i-1}\,d\theta
-  = B(\alpha),
-  \label{eq:integraldirichlet}
-\end{equation}
-
-Integral diambil atas simpleks $\Delta^{V-1}$
-(Definisi~\ref{def:simpleks}) dan $d\theta=d\theta_1\cdots d\theta_{V-1}$
-($\theta_V=1-\sum_{i<V}\theta_i$; ditentukan oleh $\theta_1,\dots,
-\theta_{V-1}$). Pembuktian Persamaan~\eqref{eq:integraldirichlet} memakai
-representasi $V$ variabel Gamma independen
-$G_i\sim\operatorname{Gamma}(\alpha_i,1)$ dan substitusi
-$\theta_i=G_i/\sum_j G_j$, yang melibatkan kalkulus peubah-banyak
-(Jacobian transformasi) \citet{gelman}.
 
 \begin{definisi}[\citealp{gelman}]
 \label{def:dirichlet}
-Vektor random $\theta=(\theta_1,\dots,\theta_V)^{\top}$ berdistribusi
-\textit{Dirichlet} dengan parameter konsentrasi
-$\alpha=(\alpha_1,\dots,\alpha_V)$, $\alpha_i>0$, ditulis
-$\theta\sim\operatorname{Dir}(\alpha)$, apabila $\theta$ bertumpu pada
-$\Delta^{V-1}$ dengan kepadatan
+Vektor random $\theta=(\theta_1,\ldots,\theta_V)^\top$
+berdistribusi Dirichlet dengan parameter konsentrasi
+$\alpha=(\alpha_1,\ldots,\alpha_V)$, ditulis
+$\theta\sim\operatorname{Dir}(\alpha)$, apabila $\theta$ berada
+pada simpleks probabilitas $\Delta^{V-1}$ dan memiliki fungsi
+kepadatan
 \begin{equation}
-  f(\theta;\alpha) = \frac{1}{B(\alpha)}\prod_{i=1}^{V}\theta_i^{\alpha_i-1}.
-  \label{eq:dirichlet}
+f(\theta;\alpha)=
+\frac{1}{B(\alpha)}
+\prod_{i=1}^{V}\theta_i^{\alpha_i-1},
+\label{eq:dirichlet}
+\end{equation}
+dengan $\theta_i\geq 0$ dan $\sum_{i=1}^{V}\theta_i=1$.
+Ekspektasi setiap komponennya adalah
+\begin{equation}
+\mathbb{E}[\theta_i]=\frac{\alpha_i}{\alpha_0},
+\qquad i=1,\ldots,V.
+\label{eq:ekspektasidirichlet}
 \end{equation}
 \end{definisi}
 
-Persamaan~\eqref{eq:dirichlet} adalah kepadatan bernilai taknegatif dan
-berintegral satu dari Persamaan~\eqref{eq:integraldirichlet}.
+Parameter $\alpha_i$ menentukan bobot relatif komponen ke-$i$,
+sedangkan $\alpha_0$ merupakan jumlah seluruh parameter konsentrasi.
+Ekspektasi tersebut menunjukkan bahwa nilai rata-rata setiap komponen
+sebanding dengan parameternya terhadap total konsentrasi.
 
-Untuk $V=2$, distribusi Dirichlet berimpit dengan distribusi Beta. Simpleks $\Delta^{1}=\{(\theta_1,\theta_2):\theta_1+
-\theta_2=1,\ \theta_i\ge 0\}$ setara dengan selang $\theta_1\in(0,1)$,
-karena $\theta_2=1-\theta_1$ ditentukan sepenuhnya oleh $\theta_1$.
-Menuliskan $\theta=\theta_1$, $a=\alpha_1$, $b=\alpha_2$, dan mengganti
-$\theta_2$ dengan $1-\theta$ pada Persamaan~\eqref{eq:dirichlet},
-\begin{align}
-  f(\theta;\alpha)
-  = \frac{1}{B(\alpha_1,\alpha_2)}\,\theta_1^{\alpha_1-1}\theta_2^{\alpha_2-1}
-  = \frac{1}{B(a,b)}\,\theta^{a-1}(1-\theta)^{b-1},
-\end{align}
-karena $B(\alpha_1,\alpha_2)=\Gamma(\alpha_1)\Gamma(\alpha_2)/
-\Gamma(\alpha_1+\alpha_2)$ pada Persamaan~\eqref{eq:betafungsimultivariat}
-menyerupai $B(a,b)$ pada Persamaan~\eqref{eq:betafungsi} untuk $V=2$. Ruas
-kanan tersebut menyerupai kepadatan Beta pada Persamaan~\eqref{eq:distribusibeta}, sehingga
-distribusi Beta adalah kasus khusus Dirichlet untuk $V=2$.
+Dalam penelitian ini, sifat distribusi Dirichlet yang relevan adalah
+bentuk kepadatan dan ekspektasi komponennya. Bentuk kepadatan
+menjelaskan distribusi prior dan posterior, sedangkan ekspektasi
+digunakan untuk memperoleh bobot campuran dari parameter posterior.
 
-Nilai ekspektasi $\theta_i$ diperoleh berdasarkan definisi ekspektasi
-variabel random kontinu dan fungsi kepadatan Dirichlet pada
-Persamaan~\eqref{eq:dirichlet}. Dengan demikian,
 
-\begin{align}
-\mathbb{E}[\theta_i]
-&= \int_{\Delta^{V-1}} \theta_i f(\theta;\alpha)\,d\theta\\
-&= \frac{1}{B(\alpha)}
-   \int_{\Delta^{V-1}}
-   \theta_i\prod_{j=1}^{V}\theta_j^{\alpha_j-1}\,d\theta\\
-&= \frac{1}{B(\alpha)}
-   \int_{\Delta^{V-1}}
-   \theta_i^{\alpha_i}
-   \prod_{j\ne i}\theta_j^{\alpha_j-1}\,d\theta.
-   \label{eq:integraleksektasidir}
-\end{align}
-
-Karena $\theta_i\theta_i^{\alpha_i-1}=\theta_i^{\alpha_i}$,
-integral~\eqref{eq:integraleksektasidir} dapat dinyatakan menggunakan fungsi Beta
-multivariat pada Persamaan~\eqref{eq:integraldirichlet}, dengan
-parameter ke-$i$ dinaikkan dari $\alpha_i$ menjadi $\alpha_i+1$.
-Oleh karena itu,
-
-\begin{equation}
-\mathbb{E}[\theta_i]
-= \frac{B(\alpha_1,\ldots,\alpha_i+1,\ldots,\alpha_V)}
-       {B(\alpha)}.
-\end{equation}
-
-Berdasarkan definisi fungsi Beta multivariat pada
-Persamaan~\eqref{eq:betafungsimultivariat}, diperoleh
-
-\begin{align}
-\mathbb{E}[\theta_i]
-&= \frac{
-   \displaystyle
-   \frac{\Gamma(\alpha_i+1)
-   \prod_{j\ne i}\Gamma(\alpha_j)}
-   {\Gamma(\alpha_0+1)}
-   }{
-   \displaystyle
-   \frac{\prod_{j=1}^{V}\Gamma(\alpha_j)}
-   {\Gamma(\alpha_0)}
-   }\\
-&= \frac{\Gamma(\alpha_i+1)}{\Gamma(\alpha_i)}
-   \cdot
-   \frac{\Gamma(\alpha_0)}{\Gamma(\alpha_0+1)}.
-\end{align}
-
-Sifat rekursif fungsi Gamma pada
-Persamaan~\eqref{eq:gammarekursif}, yaitu
-$\Gamma(a+1)=a\Gamma(a)$, diperoleh
-
-\begin{align}
-\mathbb{E}[\theta_i]
-&= \frac{\alpha_i\Gamma(\alpha_i)}{\Gamma(\alpha_i)}
-   \cdot
-   \frac{\Gamma(\alpha_0)}
-   {\alpha_0\Gamma(\alpha_0)}\\
-&= \frac{\alpha_i}{\alpha_0}.
-\end{align}
-
-Nilai ekspektasi komponen ke-$i$ dari vektor random
-yang berdistribusi Dirichlet adalah
-
-\begin{equation}
-\mathbb{E}[\theta_i]
-= \frac{\alpha_i}{\alpha_0},
-\qquad i=1,\ldots,V,
-\label{eq:ekspektasidirichlet}
-\end{equation}
-
-dengan $\alpha_0=\sum_{j=1}^{V}\alpha_j$.
-
-Massa konsentrasi $\alpha_0$ berperan sebagai penyebut bersama, dan setiap
-komponen $\theta_i$ diberi bobot sebanding dengan pseudo-count $\alpha_i$.
 
 
 \section{Himpunan Konveks}
@@ -937,10 +821,10 @@ ditulis $\operatorname{conv}(S)$, didefinisikan sebagai
     k\in\mathbb{N},\ x_i\in S,\ \theta_i\geq 0,\\
     \displaystyle\sum_{i=1}^{k}\theta_i=1
     \end{array}
-    \right\}.
+    \right\},
     \label{eq:convexhull}
 \end{equation}
-Dengan demikian, $\operatorname{conv}(S)$ merupakan himpunan
+sehingga $\operatorname{conv}(S)$ merupakan himpunan
 konveks terkecil yang memuat $S$.
 \end{definisi}
 
@@ -1056,197 +940,388 @@ $\mathcal{X}$.
 
 
 \section{Inferensi Bayes}
-
 \label{sec:bayes}
 
 Inferensi Bayes merupakan pendekatan untuk melakukan inferensi terhadap
-parameter yang tidak diketahui dengan menggabungkan informasi awal mengenai
-parameter dengan informasi yang diperoleh dari data. Informasi awal tersebut
-dinyatakan melalui distribusi prior, sedangkan informasi dari data dinyatakan
-melalui likelihood. Hasil penggabungan keduanya menghasilkan distribusi
-posterior.
+parameter yang tidak diketahui dengan menggabungkan informasi awal
+mengenai parameter dan informasi yang diperoleh dari data. Informasi
+awal dinyatakan melalui distribusi prior, sedangkan informasi dari data
+dinyatakan melalui likelihood. Penggabungan keduanya menghasilkan
+distribusi posterior yang menggambarkan ketidakpastian parameter setelah
+data diamati \citep{casella}.
 
-\subsection{definisi Bayes: Prior, Likelihood, dan Posterior}
-
+\subsection{Definisi Bayes: Prior, Likelihood, dan Posterior}
 \label{subsec:definisibayes}
 
-Hubungan antara prior, likelihood, dan posterior diberikan oleh definisi Bayes.
-
-\begin{definisi}[definisi Bayes; \citealp{casella}]
-
-\label{teo:bayes}
-
+\begin{definisi}[Rumus Bayes; \citealp{casella}]
+\label{def:bayes}
 Misalkan $\theta$ merupakan parameter dan $Y$ merupakan variabel random
-yang menghasilkan data $y$. Jika $f(\theta)$ merupakan distribusi prior dan
-$f(y\mid\theta)$ merupakan fungsi massa peluang atau fungsi kepadatan
-bersyarat dari $Y$ diberikan $\theta$, maka distribusi posterior $\theta$
-diberikan data $y$ adalah
-
+yang menghasilkan data $y$. Jika $f(\theta)$ merupakan distribusi prior
+dan $f(y\mid\theta)$ merupakan fungsi massa peluang atau fungsi kepadatan
+bersyarat dari $Y$ diberikan $\theta$, maka distribusi posterior
+$\theta$ setelah data $y$ diamati adalah
 \begin{equation}
 f(\theta\mid y)
 =
-\frac{f(y\mid\theta)f(\theta)}
-{f(y)}.
+\frac{f(y\mid\theta)f(\theta)}{f(y)}.
 \label{eq:bayes}
 \end{equation}
-
-Untuk $\theta$ kontinu, penyebut pada Persamaan~\eqref{eq:bayes} diperoleh
-dengan mengintegralkan pembilang terhadap seluruh kemungkinan nilai
-$\theta$, yaitu
-
+Untuk parameter kontinu, evidence $f(y)$ diperoleh melalui
 \begin{equation}
 f(y)
 =
 \int f(y\mid\theta)f(\theta)\,d\theta.
 \label{eq:evidencekontinu}
 \end{equation}
-
-Jika $\theta$ diskret, integral tersebut digantikan dengan penjumlahan.
-
+Untuk parameter diskret, integral digantikan dengan penjumlahan.
 \end{definisi}
 
-\begin{proof}
-Kepadatan bersama $\theta$ dan $Y$ dapat difaktorkan dalam dua arah,
-$f(\theta,y)=f(\theta\mid y)f(y)=f(y\mid\theta)f(\theta)$. Menyamakan ruas
-kanan kedua faktorisasi dan membagi kedua ruas dengan $f(y)$ memberikan
-Persamaan~\eqref{eq:bayes}.
-\end{proof}
-
-definisi Bayes dapat dipahami dengan melihat peran masing-masing komponen
-pada Persamaan~\eqref{eq:bayes}. Distribusi $f(\theta)$ disebut
-\textit{prior}, yaitu informasi mengenai $\theta$ sebelum data diamati.
-Fungsi $f(y\mid\theta)$ disebut \textit{likelihood}, yaitu ukuran seberapa
-sesuai data $y$ dengan suatu nilai $\theta$. Setelah informasi dari data
-digabungkan dengan prior, diperoleh $f(\theta\mid y)$ yang disebut
-\textit{posterior}.
-
-Secara proporsional Persamaan~\eqref{eq:bayes} dapat
-ditulis sebagai
-
+Pada Persamaan~\eqref{eq:bayes}, $f(\theta)$ merupakan prior,
+$f(y\mid\theta)$ merupakan likelihood, $f(y)$ merupakan evidence,
+dan $f(\theta\mid y)$ merupakan posterior. Evidence berfungsi sebagai
+konstanta normalisasi agar posterior merupakan distribusi probabilitas
+yang sah. Karena evidence tidak bergantung pada $\theta$, posterior
+juga dapat dinyatakan secara proporsional sebagai
 \begin{equation}
 f(\theta\mid y)
-\propto
-f(y\mid\theta)f(\theta).
+\propto f(y\mid\theta)f(\theta).
 \label{eq:bayesproporsional}
 \end{equation}
+Bentuk proporsional ini memudahkan penentuan posterior ketika hasil
+perkalian likelihood dan prior sudah dapat dikenali sebagai kernel
+suatu keluarga distribusi.
 
-Simbol $\propto$ berarti ``sebanding dengan''. Artinya, posterior memiliki
-bentuk yang sama dengan hasil perkalian likelihood dan prior setelah
-dilakukan normalisasi. Faktor normalisasi tersebut adalah $f(y)$, yang
-disebut \textit{evidence} atau distribusi marginal dari data.
 
 \subsection{Prior Konjugat}
 \label{subsec:priorkonjugat}
 
 \begin{definisi}[\citealp{casella}]
 \label{def:priorkonjugat}
-Keluarga distribusi prior $\mathcal{F}$ disebut \textit{konjugat} terhadap
-suatu likelihood $f(y\mid\theta)$ apabila, untuk setiap prior
-$f(\theta)\in\mathcal{F}$, posterior $f(\theta\mid y)\propto
-f(y\mid\theta)f(\theta)$ juga berada dalam $\mathcal{F}$.
+Keluarga distribusi prior $\mathcal{F}$ disebut konjugat terhadap
+likelihood $f(y\mid\theta)$ apabila posterior yang diperoleh dari
+setiap prior dalam $\mathcal{F}$ juga termasuk dalam keluarga
+distribusi $\mathcal{F}$.
 \end{definisi}
 
-Kekonjugatan bermanfaat secara komputasi, dimana posterior dapat langsung
-dituliskan dalam bentuk tertutup, tanpa menghitung integral penormal
-$f(y)$ pada Persamaan~\eqref{eq:bayes} secara eksplisit.
+Kekonjugatan memungkinkan posterior dinyatakan dalam bentuk tertutup
+tanpa harus menghitung evidence secara eksplisit. Salah satu contoh
+yang relevan dalam penelitian ini adalah kekonjugatan Dirichlet--Multinomial.
+
 
 \subsection{Kekonjugatan Dirichlet--Multinomial}
 \label{subsec:konjugasidirichletmultinomial}
 
 \begin{definisi}[\citealp{gelman}]
-\label{teo:konjugasidirichletmultinomial}
-Misalkan $\theta\sim\operatorname{Dir}(\alpha)$ dan, diberikan $\theta$,
-$\bm{c}=(c_1,\dots,c_V)^{\top}\sim\operatorname{Multinomial}(n,\theta)$
-(Definisi~\ref{def:multinomial}). Distribusi posterior $\theta$ diberikan
-$\bm{c}$ adalah
+\label{def:konjugasidirichletmultinomial}
+Misalkan vektor probabilitas
+$\theta=(\theta_1,\ldots,\theta_V)^\top$ memiliki prior
+\[
+\theta\sim\operatorname{Dir}(\alpha),
+\qquad
+\alpha=(\alpha_1,\ldots,\alpha_V)^\top,
+\]
+dengan $\alpha_i>0$. Jika, diberikan $\theta$, vektor frekuensi
+kategori $\bm{c}=(c_1,\ldots,c_V)^\top$ mengikuti distribusi
+Multinomial dengan ukuran sampel $n$, maka posteriornya adalah
 \begin{equation}
-  \theta\mid\bm{c} \sim \operatorname{Dir}(\alpha+\bm{c}).
-  \label{eq:konjugasidirichletmultinomial}
+\theta\mid\bm{c}
+\sim\operatorname{Dir}(\alpha+\bm{c}).
+\label{eq:konjugasidirichletmultinomial}
 \end{equation}
 \end{definisi}
 
-\begin{proof}
-Oleh definisi~\ref{teo:bayes}, $f(\theta\mid\bm{c})\propto
-f(\bm{c}\mid\theta)f(\theta)$ sebagai fungsi $\theta$. Likelihood
-multinomial (Persamaan~\eqref{eq:multinomial}) dan prior Dirichlet
-(Persamaan~\eqref{eq:dirichlet}) memberikan
-\[
-  f(\bm{c}\mid\theta)f(\theta)
-  = \left(\frac{n!}{\prod_{i=1}^{V}c_i!}\prod_{i=1}^{V}\theta_i^{c_i}\right)
-    \left(\frac{1}{B(\alpha)}\prod_{i=1}^{V}\theta_i^{\alpha_i-1}\right),
-\]
-yang setelah suku-suku konstan (tak bergantung $\theta$) digabungkan,
-\[
-  f(\bm{c}\mid\theta)f(\theta)
-  = \frac{n!}{B(\alpha)\prod_{i=1}^{V}c_i!}\;
-    \prod_{i=1}^{V}\theta_i^{\alpha_i+c_i-1}.
-\]
-Sebagai fungsi $\theta$, $f(\bm{c}\mid\theta)f(\theta)$ sebanding dengan
-$\prod_{i=1}^{V}\theta_i^{(\alpha_i+c_i)-1}$, yaitu kernel kepadatan
-$\operatorname{Dir}(\alpha+\bm{c})$ pada Persamaan~\eqref{eq:dirichlet}.
-Karena kepadatan $\theta\mid\bm{c}$ harus berintegral satu atas
-$\Delta^{V-1}$, dan oleh Persamaan~\eqref{eq:integraldirichlet}
-satu-satunya konstanta yang menormalkan kernel tersebut adalah
-$1/B(\alpha+\bm{c})$,
-diperoleh
-\[
-  f(\theta\mid\bm{c}) = \frac{1}{B(\alpha+\bm{c})}
-  \prod_{i=1}^{V}\theta_i^{(\alpha_i+c_i)-1},
-\]
-yaitu kepadatan $\operatorname{Dir}(\alpha+\bm{c})$.
-\end{proof}
+Hasil tersebut dapat diturunkan menggunakan Rumus Bayes dengan
+mengalikan likelihood Multinomial dan prior Dirichlet. Berdasarkan
+Persamaan~\eqref{eq:multinomial}, fungsi likelihood untuk vektor
+frekuensi $\bm{c}$ adalah
+\begin{equation}
+f(\bm{c}\mid\theta)
+=
+\frac{n!}{\prod_{i=1}^{V}c_i!}
+\prod_{i=1}^{V}\theta_i^{c_i},
+\label{eq:likelihoodmultinomial}
+\end{equation}
+dengan $\sum_{i=1}^{V}c_i=n$. Sementara itu, berdasarkan
+Persamaan~\eqref{eq:dirichlet}, fungsi kepadatan prior Dirichlet
+adalah
+\begin{equation}
+f(\theta)
+=
+\frac{1}{B(\alpha)}
+\prod_{i=1}^{V}\theta_i^{\alpha_i-1},
+\label{eq:priorlengkap}
+\end{equation}
+dengan $B(\alpha)$ merupakan konstanta normalisasi distribusi
+Dirichlet.
 
-Untuk $n=1$ (satu pengamatan), $\bm{c}=e_y$, vektor indikator
-(Definisi~\ref{def:onehot}) pada kategori $y$ yang teramati, sehingga
-Persamaan~\eqref{eq:konjugasidirichletmultinomial} menjadi
-$\theta\mid y\sim\operatorname{Dir}(\alpha+e_y)$.
+Menurut Rumus Bayes pada Persamaan~\eqref{eq:bayes}, posterior
+sebanding dengan perkalian likelihood dan prior. Oleh karena itu,
+diperoleh
+\begin{align}
+f(\theta\mid\bm{c})
+&\propto f(\bm{c}\mid\theta)f(\theta)
+\nonumber\\
+&=
+\frac{n!}{\prod_{i=1}^{V}c_i!}
+\frac{1}{B(\alpha)}
+\left(\prod_{i=1}^{V}\theta_i^{c_i}\right)
+\left(\prod_{i=1}^{V}\theta_i^{\alpha_i-1}\right).
+\label{eq:perkalianlikelihoodprior}
+\end{align}
+
+Pada Persamaan~\eqref{eq:perkalianlikelihoodprior}, faktor
+$\frac{n!}{\prod_{i=1}^{V}c_i!}$ dan $\frac{1}{B(\alpha)}$
+tidak bergantung pada $\theta$. Karena itu, kedua faktor tersebut
+dapat diserap ke dalam konstanta proporsionalitas. Selanjutnya,
+menggunakan sifat perkalian berpangkat
+$x^a x^b=x^{a+b}$, diperoleh
+\begin{align}
+f(\theta\mid\bm{c})
+&\propto
+\prod_{i=1}^{V}
+\theta_i^{c_i}\theta_i^{\alpha_i-1}
+\nonumber\\
+&=
+\prod_{i=1}^{V}
+\theta_i^{\alpha_i+c_i-1}.
+\label{eq:kernelposterior}
+\end{align}
+
+Bentuk pada Persamaan~\eqref{eq:kernelposterior} sama dengan
+bentuk kernel distribusi Dirichlet, yaitu hasil kali setiap
+komponen probabilitas yang dipangkatkan dengan parameter
+distribusinya dikurangi satu. Dengan membandingkannya dengan
+fungsi kepadatan Dirichlet, parameter posterior dapat diidentifikasi
+sebagai $\alpha_i+c_i$ untuk setiap kategori $i$.
+
+Agar menjadi fungsi kepadatan probabilitas, kernel
+tersebut harus dinormalisasi. Konstanta normalisasinya adalah
+$B(\alpha+\bm{c})$, sehingga posterior lengkapnya menjadi
+\begin{equation}
+f(\theta\mid\bm{c})
+=
+\frac{1}{B(\alpha+\bm{c})}
+\prod_{i=1}^{V}
+\theta_i^{\alpha_i+c_i-1}
+\label{eq:posteriorlengkap}
+\end{equation}
+dan diperoleh
+$\theta\mid\bm{c}\sim\operatorname{Dir}(\alpha+\bm{c})$,
+sebagaimana dinyatakan pada
+Persamaan~\eqref{eq:konjugasidirichletmultinomial}. Hasil ini
+menunjukkan bahwa keluarga prior Dirichlet tetap menjadi keluarga
+posterior setelah pengamatan mengikuti likelihood Multinomial.
+
+
+Secara intuitif, pembaruan posterior menambahkan frekuensi
+pengamatan $c_i$ pada parameter prior $\alpha_i$. Untuk satu
+pengamatan pada kategori $y$, vektor frekuensinya merupakan
+vektor indikator $e_y$, yang didefinisikan sebagai
+\[
+(e_y)_i=
+\begin{cases}
+1, & i=y,\\
+0, & i\neq y.
+\end{cases}
+\]
+Oleh karena itu, pembaruan posterior untuk satu pengamatan adalah
+\begin{equation}
+\theta\mid y
+\sim\operatorname{Dir}(\alpha+e_y).
+\label{eq:posterioronehot}
+\end{equation}
+Artinya, parameter prior untuk kategori yang diamati bertambah
+satu, sedangkan parameter kategori lainnya tidak berubah.
 
 \begin{definisi}[\citealp{gelman}]
 \label{def:pseudocount}
-Pada konteks definisi~\ref{teo:konjugasidirichletmultinomial}, parameter
-prior $\alpha_i$ disebut \textit{pseudo-count} kategori $i$ sebelum data
-teramati, dan $\alpha_0=\sum_i\alpha_i$ disebut \textit{massa konsentrasi}
-prior. Pembaruan $\alpha\to\alpha+\bm{c}$ menambahkan peluang teramati $c_i$
-langsung ke pseudo-count $\alpha_i$.
+Parameter prior $\alpha_i$ disebut \textit{pseudo-count} kategori
+$i$, sedangkan
+\[
+\alpha_0=\sum_{i=1}^{V}\alpha_i
+\]
+disebut massa konsentrasi prior. Pembaruan
+$\alpha_i\mapsto\alpha_i+c_i$ menambahkan frekuensi pengamatan
+kategori $i$ pada pseudo-count kategori tersebut.
 \end{definisi}
+
+Berdasarkan rumus ekspektasi distribusi Dirichlet pada
+Persamaan~\eqref{eq:ekspektasidirichlet}, ekspektasi komponen
+posterior diperoleh dengan mengganti parameter prior
+$\alpha_i$ menjadi parameter posterior $\alpha_i+c_i$:
+\begin{align}
+\mathbb{E}[\theta_i\mid\bm{c}]
+&=
+\frac{\alpha_i+c_i}
+{\sum_{j=1}^{V}(\alpha_j+c_j)}
+\nonumber\\
+&=
+\frac{\alpha_i+c_i}{\alpha_0+n},
+\qquad i=1,\ldots,V,
+\label{eq:ekspektasiposterior}
+\end{align}
+karena $\sum_{i=1}^{V}c_i=n$. Persamaan ini menunjukkan bahwa
+rerata posterior ditentukan oleh pseudo-count awal dan frekuensi
+pengamatan, sedangkan penyebutnya merupakan total konsentrasi
+setelah pembaruan.
 
 \subsection{Rerata Posterior sebagai Estimator Bayes}
 \label{subsec:estimatorbayes}
 
 \begin{definisi}[\citealp{casella}]
 \label{def:risikokuadratik}
-Untuk parameter random $\theta\in\mathbb{R}^{V}$ dan penduga
-(\textit{estimator}) $\delta=\delta(y)\in\mathbb{R}^{V}$, \textit{risiko
-kuadratik} (posterior expected squared-error loss) adalah
+Misalkan $\theta\in\mathbb{R}^{V}$ merupakan parameter random
+dan $\delta=\delta(y)\in\mathbb{R}^{V}$ merupakan penduga
+parameter berdasarkan data $y$. Risiko posterior dengan \textit{squared loss} didefinisikan sebagai
 \begin{equation}
-  R(\delta\mid y) = \mathbb{E}\bigl[\lVert\theta-\delta\rVert^{2}
-  \,\big|\, y\bigr].
-  \label{eq:risikokuadratik}
+R(\delta\mid y)
+=
+\mathbb{E}\left[
+\lVert\theta-\delta\rVert_2^2
+\mid y
+\right].
+\label{eq:risikokuadratik}
 \end{equation}
-Penduga $\delta^{*}$ yang meminimumkan $R(\delta\mid y)$ atas seluruh
-$\delta\in\mathbb{R}^{V}$ disebut \textit{estimator Bayes} di bawah risiko
-kuadratik.
+Penduga yang meminimumkan risiko posterior tersebut disebut
+estimator Bayes di bawah \textit{squared loss}.
 \end{definisi}
 
-Estimator Bayes di bawah risiko kuadratik ternyata adalah rerata posterior
-itu sendiri. Untuk tiap komponen $i$, definisi~\ref{teo:linearitasekspektasi}
-yang diterapkan pada distribusi posterior memberikan
-\[
-  \mathbb{E}\bigl[(\theta_i-\delta_i)^{2}\mid y\bigr]
-  = \mathbb{E}\bigl[\theta_i^{2}\mid y\bigr]
-    - 2\delta_i\,\mathbb{E}[\theta_i\mid y] + \delta_i^{2}.
-\]
-Ruas kanan berbentuk kuadrat dalam $\delta_i$ dengan koefisien pangkat dua
-positif, sehingga memiliki minimum tunggal, tercapai ketika turunannya
-terhadap $\delta_i$ nol: $-2\mathbb{E}[\theta_i\mid y]+2\delta_i=0$, yaitu
-$\delta_i^{*}=\mathbb{E}[\theta_i\mid y]$. Menjumlahkan atas
-$i=1,\dots,V$, risiko $R(\delta\mid y)=\sum_{i=1}^{V}\mathbb{E}[(\theta_i-
-\delta_i)^{2}\mid y]$ diminimumkan pada
+Untuk menunjukkan bahwa rerata posterior merupakan estimator
+Bayes di bawah \textit{squared loss}, definisikan
+$\mu_i=\mathbb{E}[\theta_i\mid y]$. Karena kuadrat norma
+Euclidean merupakan jumlah kuadrat setiap komponen, risiko
+posterior dapat dituliskan sebagai
+\begin{align}
+R(\delta\mid y)
+&=
+\mathbb{E}\left[
+\sum_{i=1}^{V}(\theta_i-\delta_i)^2
+\mid y
+\right]
+\nonumber\\
+&=
+\sum_{i=1}^{V}
+\mathbb{E}\left[
+(\theta_i-\delta_i)^2\mid y
+\right].
+\label{eq:risikokomponen}
+\end{align}
+Langkah kedua menggunakan linearitas ekspektasi, yaitu
+ekspektasi dari jumlah berhingga sama dengan jumlah ekspektasi
+masing-masing suku.
+
+Selanjutnya, setiap selisih $\theta_i-\delta_i$ dapat diuraikan
+dengan menambahkan dan mengurangkan rerata posterior $\mu_i$:
 \begin{equation}
-  \delta^{*}=\bigl(\mathbb{E}[\theta_1\mid y],\dots,\mathbb{E}[\theta_V\mid
-  y]\bigr)^{\top}=\mathbb{E}[\theta\mid y].
-  \label{eq:estimatorbayes}
+\theta_i-\delta_i
+=
+(\theta_i-\mu_i)+(\mu_i-\delta_i).
+\label{eq:uraianselisih}
 \end{equation}
+Dengan menguadratkan kedua ruas, diperoleh
+\begin{align}
+(\theta_i-\delta_i)^2
+&=
+(\theta_i-\mu_i)^2
++2(\theta_i-\mu_i)(\mu_i-\delta_i)
+\nonumber\\
+&\quad
++(\mu_i-\delta_i)^2.
+\label{eq:kuadratselisih}
+\end{align}
+Mengambil ekspektasi bersyarat pada data $y$ menghasilkan
+\begin{align}
+&\mathbb{E}\left[
+(\theta_i-\delta_i)^2\mid y
+\right]
+\nonumber\\
+&=
+\mathbb{E}\left[
+(\theta_i-\mu_i)^2\mid y
+\right]
+\nonumber\\
+&\quad+
+2(\mu_i-\delta_i)
+\mathbb{E}\left[
+\theta_i-\mu_i\mid y
+\right]
++(\mu_i-\delta_i)^2.
+\label{eq:ekspektasikuadrat}
+\end{align}
+Pada langkah ini, $\mu_i$ dan $\delta_i$ diperlakukan sebagai
+konstanta karena keduanya ditentukan oleh distribusi posterior
+setelah data $y$ diamati.
+
+Berdasarkan definisi rerata posterior,
+\begin{align}
+\mathbb{E}\left[
+\theta_i-\mu_i\mid y
+\right]
+&=
+\mathbb{E}[\theta_i\mid y]-\mu_i
+\nonumber\\
+&=\mu_i-\mu_i=0.
+\label{eq:rerataterpusat}
+\end{align}
+Akibatnya, suku silang pada
+Persamaan~\eqref{eq:ekspektasikuadrat} bernilai nol.
+Sementara itu, suku pertama merupakan varians posterior karena
+$\mu_i=\mathbb{E}[\theta_i\mid y]$. Dengan demikian,
+\begin{equation}
+\mathbb{E}\left[
+(\theta_i-\delta_i)^2\mid y
+\right]
+=
+\operatorname{Var}(\theta_i\mid y)
++(\delta_i-\mu_i)^2.
+\label{eq:dekomposisirisiko}
+\end{equation}
+
+Substitusi Persamaan~\eqref{eq:dekomposisirisiko} ke dalam
+Persamaan~\eqref{eq:risikokomponen} memberikan
+\begin{align}
+R(\delta\mid y)
+&=
+\sum_{i=1}^{V}
+\operatorname{Var}(\theta_i\mid y)
++
+\sum_{i=1}^{V}(\delta_i-\mu_i)^2.
+\label{eq:risikoterurai}
+\end{align}
+Suku pertama tidak bergantung pada penduga $\delta$, sedangkan
+suku kedua merupakan jumlah kuadrat yang selalu tidak negatif.
+Suku kedua mencapai nilai minimum nol apabila
+$\delta_i=\mu_i$ untuk setiap $i$. Oleh karena itu, risiko
+posterior minimum dicapai oleh
+\begin{equation}
+\delta^*
+=
+\mathbb{E}[\theta\mid y]
+=
+\begin{pmatrix}
+\mathbb{E}[\theta_1\mid y]\\
+\vdots\\
+\mathbb{E}[\theta_V\mid y]
+\end{pmatrix}.
+\label{eq:estimatorbayes}
+\end{equation}
+Rerata posterior merupakan estimator Bayes
+di bawah \textit{squared loss}.
+
+Dalam konteks prior Dirichlet dan likelihood Multinomial,
+Persamaan~\eqref{eq:ekspektasiposterior} memberikan bentuk
+eksplisit estimator Bayes tersebut:
+\begin{equation}
+\delta_i^*
+=
+\frac{\alpha_i+c_i}{\alpha_0+n},
+\qquad i=1,\ldots,V.
+\label{eq:estimatorbayesdirichlet}
+\end{equation}
+Hasil ini menjadi landasan matematis untuk menggunakan rerata
+posterior sebagai bobot campuran dalam metode Mixture of Inputs.
+
+
 
 \section{Model Bahasa dan Arsitektur \textit{Transformer}}
 \label{sec:transformer}
@@ -1284,86 +1359,59 @@ barisan $x$ berarti membangkitkan token satu per satu secara berurutan:
 $x_1$ terlebih dahulu, kemudian $x_2$ dengan $x_1$ diketahui, dan
 seterusnya.
 
-Pada praktiknya, $p(\cdot\mid x_{<t})$ dihitung oleh jaringan saraf yang
-menerima $x_{<t}$ sebagai masukan dan mengeluarkan satu distribusi peluang
-atas $V$ kategori, yaitu satu titik pada simpleks $\Delta^{V-1}$
-(Definisi~\ref{def:simpleks}). Subbab berikut menjelaskan bagaimana
-distribusi tersebut dihitung.
 
 \subsection{Jaringan Saraf, Fungsi Aktivasi, dan Fungsi \textit{Softmax}}
 \label{subsec:softmax}
 
-Komponen dasar jaringan saraf tiruan adalah lapisan (\textit{layer}) yang
-memetakan masukan $u\in\mathbb{R}^{m}$ menjadi keluaran $\sigma(Wu+b)$,
-dengan $W$ dan $b$ parameter yang dipelajari dan $\sigma$ \textit{fungsi
-aktivasi} taklinear (misalnya ReLU atau \textit{tanh}) yang memungkinkan
+Komponen dasar jaringan saraf tiruan adalah lapisan (\textit{layer})
+yang memetakan masukan $u\in\mathbb{R}^{m}$ menjadi keluaran
+$\sigma(Wu+b)$, dengan $W$ dan $b$ merupakan parameter yang
+dipelajari, sedangkan $\sigma$ adalah fungsi aktivasi taklinear,
+seperti ReLU atau \textit{tanh}. Fungsi aktivasi memungkinkan
 tumpukan lapisan memodelkan hubungan yang lebih kompleks daripada
-kombinasi linear semata \citep{goodfellow}. \textit{Transformer} tersusun
-atas banyak lapisan demikian.
+kombinasi linear semata \citep{goodfellow}. Arsitektur
+\textit{Transformer} juga tersusun atas rangkaian lapisan yang
+melibatkan operasi linear dan fungsi aktivasi.
 
-Lapisan terakhir model menghasilkan vektor \textit{logit}
-$\ell=(\ell_1,\dots,\ell_V)^{\top}\in\mathbb{R}^{V}$, satu nilai per
-kategori kosakata, yang perlu diubah menjadi distribusi peluang.
+Pada model bahasa, lapisan keluaran menghasilkan vektor
+\textit{logit} $\ell=(\ell_1,\ldots,\ell_V)^\top\in\mathbb{R}^V$,
+dengan setiap $\ell_i$ merupakan skor untuk token ke-$i$ dari
+kosakata berukuran $V$. Agar skor tersebut dapat digunakan sebagai
+distribusi probabilitas, diperlukan fungsi \textit{softmax}.
 
 \begin{definisi}[\citealp{goodfellow}]
 \label{def:softmax}
-Untuk vektor logit $\ell\in\mathbb{R}^{V}$ dan parameter suhu
-(\textit{temperature}) $T>0$, fungsi \textit{softmax} menghasilkan vektor
-peluang $p=\operatorname{softmax}(\ell/T)\in\Delta^{V-1}$ dengan komponen
+Fungsi \textit{softmax} memetakan vektor logit
+$\ell\in\mathbb{R}^V$ menjadi vektor probabilitas
+$p=\operatorname{softmax}(\ell)\in\Delta^{V-1}$, dengan komponen
 \begin{equation}
-  p_i = \frac{\exp(\ell_i/T)}{\sum_{j=1}^{V}\exp(\ell_j/T)},
-  \qquad i=1,\dots,V.
-  \label{eq:softmax}
+p_i=\frac{\exp(\ell_i)}
+{\sum_{j=1}^{V}\exp(\ell_j)},
+\qquad i=1,\ldots,V.
+\label{eq:softmax}
 \end{equation}
+Setiap komponen $p_i$ menyatakan probabilitas kategori ke-$i$.
+Nilainya positif dan jumlah seluruh komponennya sama dengan satu,
+sehingga $p$ merupakan distribusi probabilitas pada simpleks
+$\Delta^{V-1}$ (Definisi~\ref{def:simpleks}).
 \end{definisi}
 
-Karena $\exp(\cdot)>0$ untuk sembarang argumen, setiap $p_i$ pada
-Persamaan~\eqref{eq:softmax} taknegatif. Menjumlahkan
-seluruh komponen, penyebutnya sama untuk tiap $i$ sehingga dapat
-dikeluarkan dari jumlah,
+Dalam penerapannya, fungsi \textit{softmax} dapat menggunakan
+parameter suhu (\textit{temperature}) $T>0$ dengan mengganti logit
+$\ell_i$ menjadi $\ell_i/T$:
 \begin{equation}
-  \sum_{i=1}^{V} p_i
-  = \sum_{i=1}^{V}\frac{\exp(\ell_i/T)}{\sum_{j=1}^{V}\exp(\ell_j/T)}
-  = \frac{\sum_{i=1}^{V}\exp(\ell_i/T)}{\sum_{j=1}^{V}\exp(\ell_j/T)}
-  = 1,
-  \label{eq:softmaxjumlahsatu}
+p_i=\frac{\exp(\ell_i/T)}
+{\sum_{j=1}^{V}\exp(\ell_j/T)}.
+\label{eq:softmax-temperature}
 \end{equation}
-sehingga $p$ memang berada pada simpleks $\Delta^{V-1}$ (Definisi~\ref{def:simpleks}).
+Parameter $T$ mengatur tingkat ketajaman distribusi. Ketika
+$T$ mengecil, perbedaan antarlogit menjadi lebih berpengaruh
+sehingga probabilitas cenderung terkonsentrasi pada kategori
+dengan logit terbesar. Sebaliknya, ketika $T$ membesar, perbedaan
+tersebut semakin berkurang dan distribusi mendekati seragam.
 
-Parameter suhu $T$ mengatur seberapa tajam distribusi tersebut, dan kedua
-kasus batasnya dapat diturunkan langsung dari Persamaan~\eqref{eq:softmax}.
-Saat $T\to\infty$, setiap $\ell_i/T\to 0$ sehingga $\exp(\ell_i/T)\to
-\exp(0)=1$ untuk seluruh $i$, dan
-\begin{equation}
-  p_i \;\longrightarrow\; \frac{1}{V}, \qquad i=1,\dots,V,
-  \label{eq:softmaxseragam}
-\end{equation}
-yaitu $p$ mendekati distribusi seragam pada $V$ kategori.
-
-Saat $T\to0^{+}$, misalkan $\ell_k=\max_i \ell_i$ tunggal (tidak ada dua
-komponen $\ell$ yang sama besar). Membagi pembilang dan penyebut
-Persamaan~\eqref{eq:softmax} dengan $\exp(\ell_k/T)$,
-\begin{equation}
-  p_i = \frac{\exp\bigl((\ell_i-\ell_k)/T\bigr)}
-  {\sum_{j=1}^{V}\exp\bigl((\ell_j-\ell_k)/T\bigr)}.
-  \label{eq:softmaxgeser}
-\end{equation}
-Untuk $i=k$, pembilangnya $\exp(0)=1$. Untuk $i\ne k$, $\ell_i-\ell_k<0$
-karena $\ell_k$ tunggal terbesar, sehingga $(\ell_i-\ell_k)/T\to-\infty$
-dan $\exp\bigl((\ell_i-\ell_k)/T\bigr)\to 0$ saat $T\to0^{+}$. Akibatnya,
-penyebut Persamaan~\eqref{eq:softmaxgeser} mendekati $1$ (hanya suku
-$i=k$ yang tersisa), dan
-\begin{equation}
-  p_k\to 1, \qquad p_i\to 0 \ \text{untuk } i\ne k,
-  \label{eq:softmaxonehot}
-\end{equation}
-yaitu $p$ mendekati vektor indikator (Definisi~\ref{def:onehot}) kategori
-$k$. Bentuk Persamaan~\eqref{eq:softmaxgeser} --- mengurangkan logit
-terbesar sebelum menerapkan $\exp(\cdot)$ --- juga dipakai dalam
-praktiknya untuk menghitung Persamaan~\eqref{eq:softmax} secara stabil
-tanpa risiko luapan (\textit{overflow}) numerik pada $\exp(\ell_i/T)$
-untuk $\ell_i/T$ besar. Gambar~\ref{fig:softmax} mengilustrasikan
-pengaruh $T$ terhadap bentuk distribusi.
+Gambar~\ref{fig:softmax} mengilustrasikan pengaruh suhu terhadap
+bentuk distribusi.
 
 \begin{figure}[H]
 \centering
@@ -1395,53 +1443,118 @@ pengaruh $T$ terhadap bentuk distribusi.
     \node at (3,-0.9) {\small $T$ besar};
   \end{scope}
 \end{tikzpicture}
-\caption{Pengaruh suhu $T$ terhadap bentuk distribusi
-$p=\operatorname{softmax}(\ell/T)$ untuk logit $\ell$ yang sama ($V=6$
-kategori). Saat $T$ kecil (kiri), distribusi memusat tajam pada satu
-kategori, mendekati vektor indikator; saat $T=1$ (tengah), distribusi
-mengikuti logit apa adanya; saat $T$ besar (kanan), distribusi mendekati
-seragam.}
+\caption{Ilustrasi pengaruh suhu $T$ terhadap distribusi
+$p=\operatorname{softmax}(\ell/T)$ untuk logit yang sama.
+Suhu kecil menghasilkan distribusi yang lebih tajam, sedangkan
+suhu besar menghasilkan distribusi yang lebih mendekati seragam.}
 \label{fig:softmax}
 \end{figure}
+
+
+
 
 \subsection{Mekanisme Atensi dan \textit{KV-Cache}}
 \label{subsec:atensi}
 
-\textit{Transformer} memproses seluruh token sekaligus lewat mekanisme
-atensi (\textit{attention}), yang memungkinkan representasi tiap posisi
-dibentuk dari kombinasi berbobot representasi posisi-posisi lain.
+\textit{Transformer} memproses representasi token melalui mekanisme
+atensi (\textit{attention}), yang memungkinkan representasi setiap
+posisi dibentuk dari kombinasi berbobot representasi posisi-posisi
+lain yang relevan.
 
 \begin{definisi}[\citealp{vaswani}]
 \label{def:atensi}
-Untuk matriks kueri (\textit{query}) $Q\in\mathbb{R}^{n\times d_k}$, kunci
-(\textit{key}) $K\in\mathbb{R}^{n\times d_k}$, dan nilai (\textit{value})
-$V\in\mathbb{R}^{n\times d_v}$, mekanisme
+Untuk matriks \textit{query} (\textit{query}) $Q\in\mathbb{R}^{n\times d_k}$,
+\textit{key} (\textit{key}) $K\in\mathbb{R}^{n\times d_k}$, dan nilai
+(\textit{value}) $V\in\mathbb{R}^{n\times d_v}$, mekanisme
 \textit{atensi produk-titik berskala} (\textit{scaled dot-product
 attention}) didefinisikan sebagai
 \begin{equation}
-  \operatorname{Atensi}(Q,K,V) = \operatorname{softmax}
-  \!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right) V,
-  \label{eq:atensi}
+\operatorname{Atensi}(Q,K,V)
+=
+\operatorname{softmax}
+\left(\frac{QK^\top}{\sqrt{d_k}}\right)V,
+\label{eq:atensi}
 \end{equation}
-dengan fungsi \textit{softmax} (Definisi~\ref{def:softmax}) pada
-Persamaan~\eqref{eq:atensi} diterapkan baris demi baris.
+dengan fungsi \textit{softmax} diterapkan pada setiap baris matriks.
 \end{definisi}
 
-Baris ke-$t$ dari $QK^{\top}$ berisi kemiripan (\textit{dot product}) kueri
-posisi $t$ dengan kunci seluruh posisi; \textit{softmax} mengubah
-kemiripan tersebut menjadi bobot yang berjumlah satu (satu titik pada
-simpleks), dan pembagi $\sqrt{d_k}$ menstabilkan besaran kemiripan agar
-tidak mendominasi \textit{softmax} saat $d_k$ besar. Gambar~\ref{fig:atensi}
-menggambarkan alur perhitungan ini. Pada praktiknya, $Q,K,V$ dihitung
-paralel pada beberapa \textit{head} berdimensi lebih kecil lalu
-digabungkan (\textit{multi-head attention}).
+
+\paragraph{Perkalian matriks (\textit{MatMul}).}
+Operasi pertama menghitung $QK^\top$. Karena
+$Q\in\mathbb{R}^{n\times d_k}$ dan
+$K^\top\in\mathbb{R}^{d_k\times n}$, hasilnya merupakan matriks
+berukuran $n\times n$. Setiap elemennya merupakan hasil kali titik
+(\textit{dot product}) antara satu baris $Q$ dan satu baris $K$:
+\begin{equation}
+(QK^\top)_{ij}
+=
+\sum_{r=1}^{d_k}Q_{ir}K_{jr}.
+\label{eq:atensi-matmul}
+\end{equation}
+Nilai tersebut mengukur kesesuaian antara \textit{query} pada posisi $i$
+dan \textit{key} pada posisi $j$. Dengan demikian, matriks $QK^\top$
+memuat skor kesesuaian setiap posisi terhadap seluruh posisi
+lainnya.
+
+\paragraph{Penskalaan (\textit{Scale}).}
+Skor kesesuaian kemudian dibagi dengan $\sqrt{d_k}$:
+\begin{equation}
+S=\frac{QK^\top}{\sqrt{d_k}}.
+\label{eq:atensi-scale}
+\end{equation}
+Pembagian ini mengendalikan besarnya skor sebelum fungsi
+\textit{softmax} diterapkan. Ketika dimensi $d_k$ membesar,
+hasil kali titik cenderung memiliki varians yang lebih besar
+dengan asumsi komponen \textit{query} dan \textit{key} memiliki varians yang
+terkendali dan tidak berkorelasi. Skor yang terlalu besar dapat
+membuat distribusi \textit{softmax} terlalu terkonsentrasi.
+Karena itu, faktor $\sqrt{d_k}$ membantu menjaga skala skor
+agar proses pembobotan lebih stabil.
+
+\paragraph{Fungsi \textit{softmax}.}
+Fungsi \textit{softmax} diterapkan pada setiap baris matriks $S$
+untuk mengubah skor kesesuaian menjadi bobot probabilitas:
+\begin{equation}
+A_{ij}
+=
+\frac{\exp(S_{ij})}
+{\sum_{r=1}^{n}\exp(S_{ir})}.
+\label{eq:atensi-softmax}
+\end{equation}
+Setiap elemen $A_{ij}$ menunjukkan bobot posisi $j$ ketika
+representasi posisi $i$ dibentuk. Untuk setiap baris $i$,
+berlaku $A_{ij}\geq 0$ dan $\sum_{j=1}^{n}A_{ij}=1$.
+Dengan demikian, bobot tersebut dapat digunakan untuk
+menggabungkan informasi dari berbagai posisi.
+
+\paragraph{Pembobotan nilai (\textit{MatMul}).}
+Operasi terakhir mengalikan matriks bobot $A$ dengan matriks
+\textit{value} $V$:
+\begin{equation}
+O=AV.
+\label{eq:atensi-output}
+\end{equation}
+Karena $A\in\mathbb{R}^{n\times n}$ dan
+$V\in\mathbb{R}^{n\times d_v}$, keluaran
+$O\in\mathbb{R}^{n\times d_v}$. Setiap baris keluaran merupakan
+kombinasi berbobot baris-baris $V$, dengan bobot yang ditentukan
+oleh skor kesesuaian pada tahap sebelumnya. Oleh karena itu,
+representasi keluaran menggabungkan informasi dari posisi-posisi
+yang memperoleh bobot atensi lebih besar.
+
+Dalam praktiknya, operasi atensi dapat dilakukan pada beberapa
+\textit{head} dengan proyeksi dan dimensi masing-masing, kemudian
+hasilnya digabungkan melalui mekanisme
+\textit{multi-head attention}.
+
+Gambar~\ref{fig:atensi} mengilustrasikan urutan operasi tersebut.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=1, every node/.style={font=\small}]
   \node[draw, minimum width=2.6cm, minimum height=0.7cm] (mm1) at (0,0) {MatMul};
   \node[draw, minimum width=2.6cm, minimum height=0.7cm] (sc) at (0,-1.1) {Scale ($/\sqrt{d_k}$)};
-  \node[draw, minimum width=2.6cm, minimum height=0.7cm] (sm) at (0,-2.2) {SoftMax};
+  \node[draw, minimum width=2.6cm, minimum height=0.7cm] (sm) at (0,-2.2) {Softmax};
   \node[draw, minimum width=2.6cm, minimum height=0.7cm] (mm2) at (0,-3.3) {MatMul};
   \draw[->] (mm1) -- (sc);
   \draw[->] (sc) -- (sm);
@@ -1460,96 +1573,97 @@ Persamaan~\eqref{eq:atensi}, mengikuti diagram \citet{vaswani}.}
 \label{fig:atensi}
 \end{figure}
 
-Pada pembangkitan teks autoregresif, token dihasilkan satu per satu, dan
-$K,V$ pada tiap lapisan hanya bergantung pada token yang sudah ada.
-Alih-alih menghitung ulang $K,V$ untuk seluruh token setiap langkah, baris
-$K,V$ milik token-token sebelumnya dapat disimpan dan dipakai kembali.
+Pada pembangkitan teks autoregresif, token dihasilkan satu per
+satu. Untuk setiap lapisan, representasi token yang telah diproses
+menghasilkan matriks \textit{key} dan \textit{value} yang dapat digunakan kembali
+pada langkah berikutnya. Tanpa penyimpanan, model perlu menghitung
+ulang \textit{key} dan \textit{value} token-token sebelumnya pada setiap langkah.
 
 \begin{definisi}
 \label{def:kvcache}
-\textit{KV-cache} pada langkah ke-$t$ adalah himpunan matriks kunci dan
-nilai yang telah dihitung untuk token $1,\dots,t-1$ di tiap lapisan $l$,
+\textit{KV-cache} pada langkah ke-$t$ menyimpan matriks \textit{key} dan
+\textit{value} untuk token-token sebelumnya pada setiap lapisan $l$:
 \begin{equation}
-  \mathcal{M}_t^{(l)} = \bigl\{K_{1:t-1}^{(l)},\, V_{1:t-1}^{(l)}\bigr\}.
-  \label{eq:kvcache}
+\mathcal{M}_t^{(l)}
+=
+\left\{K_{1:t-1}^{(l)},V_{1:t-1}^{(l)}\right\}.
+\label{eq:kvcache}
 \end{equation}
-Pada langkah $t$, hanya $K_t^{(l)},V_t^{(l)}$ untuk token baru yang perlu
-dihitung dan digabungkan dengan $\mathcal{M}_t^{(l)}$, bukan menghitung
-ulang seluruh matriks.
+Pada langkah $t$, \textit{key} dan \textit{value} token baru dihitung lalu
+digabungkan dengan cache yang telah tersimpan. Dengan demikian,
+model tidak perlu menghitung ulang \textit{key} dan \textit{value} seluruh
+token sebelumnya.
 \end{definisi}
 
-\subsection{Embedding Masukan dan Keluaran}
-\label{subsec:embedding}
 
-\begin{definisi}[\citealp{vaswani}]
-\label{def:embedding}
-Matriks \textit{embedding} masukan $W_{\mathrm{in}}\in\mathbb{R}^{V\times
-d}$ memetakan tiap token $i\in\mathcal{V}$ ke baris ke-$i$-nya, sebuah
-vektor berdimensi $d$. Matriks \textit{embedding} keluaran (atau
-\textit{unembedding}) $W_{\mathrm{out}}\in\mathbb{R}^{V\times d}$
-memetakan representasi tersembunyi $h\in\mathbb{R}^{d}$ menjadi vektor
-logit $\ell=W_{\mathrm{out}}h\in\mathbb{R}^{V}$ pada
-Persamaan~\eqref{eq:softmax}.
-\end{definisi}
-
-Pada sejumlah arsitektur, kedua matriks ini disatukan
-($W_{\mathrm{out}}=W_{\mathrm{in}}$, disebut \textit{tied embedding}),
-sedangkan pada arsitektur lain keduanya dipelajari independen
-(\textit{untied}) \citep{vaswani}. Pada kasus \textit{untied}, ruang
-representasi masukan dan ruang representasi keluaran tidak otomatis
-identik.
-
-\subsection{\textit{Tokenizer} dan \textit{Byte-Pair Encoding}}
-\label{subsec:bpe}
-
-Token pada Persamaan~\eqref{eq:autoregresif} bukan selalu berupa kata
-utuh. \textit{Tokenizer} memecah teks menjadi unit subkata (\textit{subword
-unit}), dan \textit{byte-pair encoding} (BPE) adalah salah satu algoritma
-untuk membentuk kosakata subkata tersebut: dimulai dari karakter individual,
-pasangan simbol yang paling sering muncul berdampingan digabung menjadi
-satu simbol baru, diulang hingga kosakata mencapai ukuran target $V$
-\citep{sennrich}. Dengan demikian, kata yang sering muncul utuh cenderung
-menjadi satu token, sedangkan kata yang jarang muncul dipecah menjadi
-beberapa subkata yang lebih umum.
 
 \section{Strategi Pengambilan Sampel Token}
 \label{sec:sampling}
 
-Setelah distribusi $p=\operatorname{softmax}(\ell/T)\in\Delta^{V-1}$
-diperoleh (Persamaan~\eqref{eq:softmax}), token berikutnya $x_t$ masih
-harus dipilih dari distribusi tersebut. Cara paling sederhana adalah
-\textit{greedy}, memilih kategori dengan peluang terbesar,
-$x_t=\operatorname*{arg\,max}_i p_i$, atau membangkitkannya langsung,
-$x_t\sim\operatorname{Kategorik}(p)$ (Definisi~\ref{def:onehot}). Kedua
-ekstrem ini punya kelemahan: \textit{greedy} selalu deterministik,
-sedangkan sampling langsung dari $p$ sesekali memilih kategori berpeluang
-sangat kecil.
+Setelah distribusi probabilitas token
+$p=\operatorname{softmax}(\ell/T)\in\Delta^{V-1}$
+diperoleh (Persamaan~\eqref{eq:softmax}), model perlu menentukan
+token berikutnya $x_t$ berdasarkan distribusi tersebut. Salah satu
+cara adalah \textit{greedy decoding}, yaitu memilih token dengan
+probabilitas terbesar,
+\begin{equation}
+x_t=\operatorname*{arg\,max}_{i\in\mathcal{V}}p_i.
+\label{eq:greedy}
+\end{equation}
+Strategi ini bersifat deterministik untuk distribusi yang sama.
+Alternatifnya, model dapat mengambil sampel dari distribusi
+kategorik,
+\begin{equation}
+x_t\sim\operatorname{Kategorik}(p),
+\label{eq:categorical-sampling}
+\end{equation}
+sehingga peluang terpilihnya setiap token sebanding dengan
+probabilitasnya. Berbeda dari \textit{greedy decoding}, strategi ini
+memungkinkan token dengan probabilitas lebih rendah tetap terpilih.
+Namun, sampling langsung dari $p$ juga memungkinkan token dengan
+probabilitas sangat kecil terpilih.
 
-Dua strategi berikut memotong dahulu distribusi $p$ sebelum sampling,
-sehingga kategori berpeluang sangat kecil tersisih.
+Untuk membatasi pilihan token, distribusi probabilitas dapat
+dipotong sebelum sampling dilakukan. Dua strategi yang umum
+digunakan adalah \textit{top-k sampling} dan \textit{nucleus
+sampling} (\textit{top-p sampling}).
 
 \begin{definisi}[\citealp{holtzman}]
 \label{def:topk}
-Untuk ambang $k\in\mathbb{N}$, misalkan $\mathcal{I}_k\subset\mathcal{V}$
-himpunan $k$ kategori dengan $p_i$ terbesar. \textit{Top-k sampling}
-membangkitkan $x_t$ dari distribusi $p$ yang dipotong pada $\mathcal{I}_k$
-dan dinormalisasi ulang,
+Untuk $k\in\{1,\ldots,V\}$, misalkan
+$\mathcal{I}_k\subseteq\mathcal{V}$ merupakan himpunan $k$ token
+dengan probabilitas terbesar. Pada \textit{top-k sampling},
+probabilitas token di luar himpunan tersebut dibuat nol, sedangkan
+probabilitas token yang tersisa dinormalisasi ulang:
 \begin{equation}
-  P[x_t=i] =
-  \begin{cases}
-    \dfrac{p_i}{\sum_{j\in\mathcal{I}_k} p_j}, & i\in\mathcal{I}_k,\\[1.5ex]
-    0, & i\notin\mathcal{I}_k.
-  \end{cases}
-  \label{eq:topk}
+\widetilde p_i=
+\begin{cases}
+\dfrac{p_i}{\sum_{j\in\mathcal{I}_k}p_j},
+& i\in\mathcal{I}_k,\\[1.5ex]
+0, & i\notin\mathcal{I}_k.
+\end{cases}
+\label{eq:topk}
 \end{equation}
-\textit{Nucleus} (\textit{top-p}) \textit{sampling} melakukan hal serupa
-dengan $\mathcal{I}_k$ diganti $\mathcal{I}_p$, himpunan terkecil yang
-peluang kumulatifnya --- setelah $p_i$ diurutkan menurun --- baru saja
-melampaui ambang $p\in(0,1)$.
-\end{definisi}
+Dengan demikian, hanya $k$ token dengan probabilitas terbesar
+yang dapat dipilih.
 
-Gambar~\ref{fig:sampling} membandingkan kedua cara memotong distribusi
-tersebut.
+Pada \textit{nucleus sampling} atau \textit{top-p sampling},
+himpunan token yang dipertahankan ditentukan berdasarkan
+probabilitas kumulatif. Misalkan token diurutkan berdasarkan
+probabilitas yang menurun. Himpunan $\mathcal{I}_p$ merupakan
+himpunan terkecil yang memenuhi
+\begin{equation}
+\sum_{i\in\mathcal{I}_p}p_i\geq p,
+\qquad p\in(0,1).
+\label{eq:nucleus}
+\end{equation}
+Sama seperti pada \textit{top-k sampling}, probabilitas token
+di luar $\mathcal{I}_p$ dibuat nol dan probabilitas token yang
+tersisa dinormalisasi ulang sebelum sampling dilakukan.
+Perbedaannya, \textit{top-k sampling} membatasi banyaknya token,
+sedangkan \textit{top-p sampling} membatasi massa probabilitas
+kumulatif yang dipertahankan.
+\end{definisi}
 
 \begin{figure}[H]
 \centering
@@ -1588,6 +1702,28 @@ peluang kumulatif). Batang biru menandai kategori yang tersisa untuk
 disampling ulang; batang abu-abu tersisih.}
 \label{fig:sampling}
 \end{figure}
+
+Gambar~\ref{fig:sampling} mengilustrasikan perbedaan kedua strategi
+tersebut. Pada \textit{top-k sampling}, jumlah token yang
+dipertahankan ditentukan oleh $k$, sedangkan pada
+\textit{top-p sampling}, jumlahnya dapat berubah mengikuti
+bentuk distribusi probabilitas.
+
+Dalam penelitian ini, strategi pengambilan token perlu dibedakan
+berdasarkan penggunaannya. Pada medium komunikasi teks
+(\texttt{text}), setiap agen menghasilkan keluaran teks melalui
+proses generasi autoregresif. Implementasi menggunakan sampling
+stokastik dengan parameter suhu $T=0{,}6$, \textit{top-k} sebesar
+20, dan \textit{top-p} sebesar 0{,}95 sebagai nilai bawaan mesin
+generasi. Pada setiap langkah, token berikutnya dipilih berdasarkan
+distribusi yang telah dipengaruhi oleh suhu dan pembatasan
+sampling tersebut. Proses ini diulang hingga generasi berakhir.
+Keluaran teks dari agen perantara kemudian diberikan kepada agen
+berikutnya sebagai konteks tekstual. Agen \textit{judger} juga
+menggunakan mekanisme generasi teks ini untuk menghasilkan
+jawaban akhir.
+
+
 
 \section{Sistem Multi-Agen}
 \label{sec:multiagen}
