@@ -3,7 +3,7 @@
 % Template resmi: laporanta1statugm.cls
 % Kompilasi: latexmk -pdf skripsi_ta1.tex
 % ============================================================================
-\documentclass{laporanta1statugm}
+\documentclass{laporanta1mathugm}
 
 \usepackage{bm}        % math tebal (dipakai di persamaan)
 
@@ -13,7 +13,7 @@
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{booktabs}
+
 
 \usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
 
@@ -77,7 +77,7 @@
 % kode) yang butuh rujukan paper/buku untuk pembuktian teoretis. Untuk direview user.
 \newcommand{\needref}[1]{{\color{blue}\textbf{[VERIFIKASI: #1]}}}
 
-% ── Data laporan ────────────────────────────────────────────────────────
+% ── Metadata laporan sesuai laporanta1statugm.cls ────────────────
 \titleind{
   Perbandingan Penalaran dan Komunikasi Berbasis Ruang Laten pada
   Sistem Multi-Agen: \textit{Mixture of Inputs} terhadap Metode
@@ -86,21 +86,27 @@
 
 \fullname{Harun Yahya}
 \NIM{22/505239/PA/21749}
-\yearenrollment{202X}
-\examdate{tanggal bulan tahun}
-\degree{Sarjana}
+\firstsupervisor{Atina Husnaqilati, S.Si., M.Sc., Ph.D.}
+% Aktifkan jika terdapat pembimbing kedua:
+% \secondsupervisor{Nama Dosen Pembimbing Kedua}
 \yearsubmit{2026}
-\firstsupervisor{Pembimbing}
-%\secondsupervisor{Nama Dosen Pembimbing ke-2}
-\firstexaminer{Ketua Penguji}
-\secondexaminer{Penguji 1}
-\thirdexaminer{Penguji 2}
+
 \begin{document}
+
+% Sampul resmi yang disediakan kelas TA1
 \cover
 
-\newpage\phantomsection\addcontentsline{toc}{chapter}{DAFTAR ISI}
-\makeatletter\renewcommand\l@chapter[2]{\ifnum \c@tocdepth >\z@\addpenalty\@secpenalty\addvspace{0em}\setlength\@tempdima{1.4em}\begingroup\parindent \z@ \rightskip \@pnumwidth\parfillskip -\@pnumwidth\leavevmode \bfseries\advance\leftskip\@tempdima\hskip -\leftskip#1\nobreak\ \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfil\nobreak\hb@xt@\@pnumwidth{\hss #2}\par\endgroup\fi}\makeatother
-\begin{singlespacing}\tableofcontents\end{singlespacing}
+% Abstrak
+\clearpage
+\input{build/bab/Abstract_TA1}
+
+% Daftar isi
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{DAFTAR ISI}
+\begin{singlespace}
+  \tableofcontents
+\end{singlespace}
 
 % ── Isi Bab ─────────────────────────────────────────────────────────────
 \input{build/bab/Bab1}
